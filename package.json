@@ -1,8 +1,7 @@
 {
 	"type": "module",
 	"scripts": {
-		"bla": "node src/playground/graph-deno.js",
-		"start": "snowpack dev",
+		"dev": "snowpack dev",
 		"build": "snowpack build",
 		"test": "node --experimental-vm-modules node_modules/.bin/jest"
 	},
