@@ -1,0 +1,18 @@
+/* eslint-disable no-undef */
+import { bindAll } from './object';
+
+//----------------------------------------------------
+test('bindAll', () => {
+	const { addX, subtract } = bindAll({
+		x: 3,
+		addX(x) {
+			return x + this.x;
+		},
+		subtract(x) {
+			return x - this.x;
+		},
+	});
+
+	expect(addX(1)).toEqual(4);
+	expect(subtract(9)).toEqual(6);
+});
