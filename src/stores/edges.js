@@ -1,11 +1,10 @@
-import { whereEq, curry, unless, append, reject, pipe } from 'ramda';
+import { whereEq, unless, append, reject, pipe } from 'ramda';
 import { writable } from 'svelte/store';
+import { findEq } from '../utils/array';
 
 const { subscribe, update } = writable([]);
 
-const has = curry((x, xs) => xs.find(whereEq(x)));
-
-const add = (x) => update(unless(has(x), append(x)));
+const add = x => update(unless(findEq(x), append(x)));
 
 const remove = pipe(whereEq, reject, update);
 
