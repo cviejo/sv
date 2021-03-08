@@ -1,12 +1,14 @@
-import { flip, is, curry, pipeWith, andThen, identity } from 'ramda';
+import { flip, is, curry, pipeWith, andThen, useWith } from 'ramda';
 
-// Unlike `pipeWith(andThen)` this starts the promise chain explicitely
+const id = x => x;
+
+const nothing = () => {};
+
+// unlike `pipeWith(andThen)` this starts the promise chain explicitly
 const pipeP = (first, ...fns) =>
 	pipeWith(andThen, [(...args) => Promise.resolve(first(...args)), ...fns]);
 
 const composeP = (...fns) => pipeP(...fns.reverse());
-
-const nothing = () => {};
 
 const S = curry((a, b, x) => {
 	const temp = b(x);
@@ -14,10 +16,10 @@ const S = curry((a, b, x) => {
 	return is(Promise, temp) ? temp.then(bx => a(x, bx)) : a(x, temp);
 });
 
-const S_ = curry((a, b, x) => S(flip(a), b, x));
+const S_ = useWith(S, [flip, id, id]);
 
 const forEachAsync = curry((fn, xs) =>
 	xs.reduce((acc, x) => acc.then(() => fn(x)), Promise.resolve())
 );
 
-export { identity as id, pipeP, composeP, nothing, forEachAsync, S, S_ };
+export { id, pipeP, composeP, nothing, forEachAsync, S, S_ };
