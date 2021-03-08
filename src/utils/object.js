@@ -1,5 +1,5 @@
 import { unless, isNil, useWith, split, pick, propOr, curry, path, pipe, last } from 'ramda';
-import { valuesIn, toPairsIn, is, bind } from 'ramda';
+import { map, valuesIn, toPairsIn, is, bind } from 'ramda';
 import { id } from './function.js';
 
 const dotPath = useWith(path, [split('.'), id]);
@@ -14,9 +14,11 @@ const renameKeys = curry((keys, obj) =>
 
 const pickRename = curry((keys, obj) => pick(valuesIn(keys), renameKeys(keys, obj)));
 
-const bindAll = (obj) =>
+const pickWith = curry((props, fn, x) => pipe(pick(props), map(fn))(x));
+
+const bindAll = obj =>
 	toPairsIn(obj)
 		.filter(pipe(last, is(Function)))
 		.reduce((acc, [key, value]) => ({ ...acc, [key]: bind(value, obj) }), {});
 
-export { dotPath as path, toPairsIn, safe, bindAll, renameKeys, pickRename };
+export { dotPath as path, toPairsIn, safe, bindAll, renameKeys, pickRename, pickWith };

@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
-import { bindAll } from './object';
+import { add } from 'ramda';
+import { pickWith, bindAll } from './object';
 
 //----------------------------------------------------
 test('bindAll', () => {
@@ -15,4 +16,9 @@ test('bindAll', () => {
 
 	expect(addX(1)).toEqual(4);
 	expect(subtract(9)).toEqual(6);
+});
+
+//----------------------------------------------------
+test('pickWith', () => {
+	expect(pickWith(['w', 'h'], add(1), { id: 'id', w: 0, h: 20 })).toEqual({ w: 1, h: 21 });
 });
