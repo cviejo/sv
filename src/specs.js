@@ -1,5 +1,5 @@
 import { __ } from 'ramda';
-import { findByProp } from './utils/array.js';
+import { findByProp } from './utils/list.js';
 
 const data = [
 	{
@@ -102,6 +102,6 @@ ui((node) => {
 
 const get = findByProp('name', __, data);
 
-const add = (x) => data.push(x);
+const add = x => data.push(x);
 
 export default { get, add, data };
