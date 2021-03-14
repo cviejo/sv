@@ -29,7 +29,7 @@ const addHeader = x => `
 
 	${x}
 
-	export { inlets, outlets, __ui__ as ui };
+	export { __inlets__ as inlets , __outlets__ as outlets , __ui__ as ui };
 `;
 
 const cleanCode = pipe(remove(/\n\n.*add_css.*\n?/), remove(/.*___SVELTE_HMR_HOT_API.*/));
