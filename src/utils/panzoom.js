@@ -6,7 +6,6 @@ import { bindAll } from './object.js';
 
 const zoomable = pipe(panzoom, bindAll);
 
-//----------------------------------------------------
 const viewport = (width, height, transform) => {
 	const scale = divide(__, transform.scale);
 
@@ -18,7 +17,6 @@ const viewport = (width, height, transform) => {
 	return { top, left, right, bottom };
 };
 
-//----------------------------------------------------
 const offset = (cursor, step, viewport) => {
 	const { x, y } = cursor;
 
@@ -37,18 +35,17 @@ const offset = (cursor, step, viewport) => {
 	return [0, 0];
 };
 
-//----------------------------------------------------
-export default (board) => {
+export default board => {
 	const container = board.parentElement;
 	const { pause, resume, getTransform, moveBy } = zoomable(board, {
 		maxZoom: 3.2,
 		minZoom: 0.3,
-		beforeWheel: (e) => !e.ctrlKey,
+		beforeWheel: e => !e.ctrlKey,
 	});
 
 	mode.subscribe(ifElse(equals('insert'), pause, resume));
 
-	cursor.subscribe((x) => {
+	cursor.subscribe(x => {
 		const width = container.offsetWidth;
 		const height = container.offsetHeight;
 
