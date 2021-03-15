@@ -1,8 +1,8 @@
 import { unless, isNil, useWith, split, pick, propOr, curry, path, pipe, last } from 'ramda';
 import { map, valuesIn, toPairsIn, is, bind } from 'ramda';
-import { id } from './function.js';
+import { I } from './combinators.js';
 
-const dotPath = useWith(path, [split('.'), id]);
+const dotPath = useWith(path, [split('.'), I]);
 
 const safe = unless(isNil);
 

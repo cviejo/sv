@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-import { add, concat, toUpper } from 'ramda';
-import { pipeP, S, S_ } from './function';
+import { add } from 'ramda';
+import { pipeP } from './function';
 
 const delay = x => new Promise(r => setTimeout(() => r(x), 10));
 
@@ -11,10 +11,3 @@ test('pipeP pipes promises', async () => {
 
 	expect(await fn(2, 3)).toEqual(25);
 });
-
-test('S', () => expect(S(concat, toUpper, 'Ap')).toEqual('ApAP'));
-
-test('S promised', () =>
-	S(concat, pipeP(toUpper, delay), 'Ap').then(x => expect(x).toEqual('ApAP')));
-
-test('S_', () => expect(S_(concat, toUpper, 'Ap')).toEqual('APAp'));

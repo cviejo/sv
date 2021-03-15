@@ -1,6 +1,6 @@
 import { useWith, curry, sortBy, pathEq, complement, split, equals, lte, gt } from 'ramda';
 import { propEq } from 'ramda';
-import { id } from './function.js';
+import { I } from './combinators.js';
 
 const derivedRect = rect => ({
 	top: rect.y,
@@ -17,7 +17,7 @@ const sortByDistance = sortBy(distance({ x: 0, y: 0 }));
 
 const notEquals = complement(equals);
 
-const dotPathEq = useWith(pathEq, [split('.'), id, id]);
+const dotPathEq = useWith(pathEq, [split('.'), I, I]);
 
 const pathNotEq = complement(dotPathEq);
 

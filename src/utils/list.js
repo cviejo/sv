@@ -1,9 +1,9 @@
 import { curry, propEq, whereEq, find, useWith, inc, prop, modulo } from 'ramda';
-import { id } from './function';
+import { I } from './combinators';
 
 const next = useWith(modulo, [inc, prop('length')]);
 
-const findEq = useWith(find, [whereEq, id]);
+const findEq = useWith(find, [whereEq, I]);
 
 const findByProp = curry((key, value, xs) => xs.find(propEq(key, value)));
 

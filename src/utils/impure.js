@@ -1,14 +1,18 @@
-import { pipe, curry } from 'ramda';
+import { pipe, prop, curry, useWith } from 'ramda';
 import { pickRename } from './object';
+import { I } from './combinators';
 
-const byId = (x) => document.getElementById(x);
+const byId = x => document.getElementById(x);
+
+const element = pipe(prop('id'), byId);
 
 const assign = curry((a, b) => Object.assign(a, b));
 
-// const setSize = curry((size, node) => assign(byId(node.id).style, size));
-const setSize = curry((size, node) => assign(byId(node.id).style, size));
+const style = pipe(element, prop('style'));
 
-const getSize = pipe(byId, pickRename({ offsetWidth: 'width', offsetHeight: 'height' }));
+const getSize = pipe(element, pickRename({ offsetWidth: 'width', offsetHeight: 'height' }));
+
+const setSize = useWith(assign, [I, style]);
 
 const resetSize = setSize({ width: '', height: '' });
 
