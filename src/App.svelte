@@ -1,6 +1,6 @@
 <script>
 	import { onMount, setContext } from 'svelte';
-	import { pipe } from 'ramda';
+	import { pipe, thunkify } from 'ramda';
 	import Split from 'split.js';
 	import Canvas from './components/Canvas.svelte';
 	import Test from './components/Test.svelte';
@@ -13,13 +13,13 @@
 
 	let editor = null;
 
-	const nodeProps = (spec) => ({ ...$cursor, spec });
+	const nodeProps = spec => ({ ...$cursor, spec });
 
-	const normalMode = () => mode.set('normal');
+	const setMode = thunkify(mode.set);
 
-	const onSpec = pipe(path('detail.value'), nodeProps, nodes.add, normalMode);
+	const onSpec = pipe(path('detail.value'), nodeProps, nodes.add, setMode('normal'));
 
-	setContext('editor', { editSpec: (x) => editor.editSpec(x) });
+	setContext('editor', { editSpec: x => editor.editSpec(x) });
 
 	onMount(() => Split(['.left', '.right'], { sizes: [65, 35] }));
 </script>

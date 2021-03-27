@@ -2,8 +2,9 @@ import { concat, prop, clamp, pipe, add, mergeWith, mergeRight, bind } from 'ram
 import { sizes } from '../config.js';
 import nodes from '../stores/nodes.js';
 import specs from '../specs.js';
-import { log, remove } from './string.js';
-import { pipeP, S } from './function.js';
+import { remove } from './string.js';
+import { pipeP } from './function.js';
+import { S } from './combinators.js';
 
 const addHeader = x => `
 	const __cacheBust__ = ${Date.now()};
@@ -42,9 +43,9 @@ const limit = clamp(0, sizes.grid - sizes.step);
 
 const move = mergeWith(pipe(add, limit));
 
-const specCode = pipe(specs.get, prop('code'), addHeader);
+const specCode = pipe(specs.get, prop('code'), cleanCode, addHeader);
 
-const runCode = pipe(prop('spec'), specCode, cleanCode, log('code'), dataUri, load);
+const runCode = pipe(prop('spec'), specCode, dataUri, load);
 
 const addNode = pipeP(S(mergeRight, runCode), bind(nodes.add, nodes));
 

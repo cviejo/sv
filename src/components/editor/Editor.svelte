@@ -3,9 +3,10 @@
 	import { focus, nodes } from '../../stores.js';
 	import { format } from '../../utils/prettier.js';
 	import { bindAll } from '../../utils/object.js';
-	import { assign } from '../../utils/impure.js';
 	import { nothing } from '../../utils/function.js';
 	import { codemirror, fromTextArea, setSize, defineEx } from './codemirror.js';
+
+	let editor = codemirror();
 
 	let spec = { code: '' };
 
@@ -14,19 +15,22 @@
 		setValue(format(spec.code));
 	}
 
-	let editor = codemirror();
+	const updateNode = x => x.assign({ updated: Date.now() });
 
-	const setEditor = tap((x) => (editor = x));
+	const updateSpec = code => {
+		spec.code = code;
+		nodes.filter(propEq('spec', spec.name)).forEach(updateNode);
+	};
 
-	const init = pipe(fromTextArea, setSize('100%', '100%'), setEditor, focus.register(__, 'editor'));
+	const setEditor = tap(x => (editor = x));
+
+	const focusable = focus.register(__, 'editor');
+
+	const init = pipe(fromTextArea, setSize('100%', '100%'), setEditor, focusable);
 
 	$: ({ setValue, getValue } = bindAll(editor));
 
-	$: onChange = pipe(nothing, getValue, format, tap(setValue), (x) => {
-		spec.code = x;
-		/* nodes.filter(propEq('spec', spec.name)).forEach(assign({ updated: Date.now() })); */
-		nodes.filter(propEq('spec', spec.name)).forEach((x) => x.assign({ updated: Date.now() }));
-	});
+	$: onChange = pipe(nothing, getValue, format, tap(setValue), updateSpec);
 
 	$: defineEx('write', 'w', onChange);
 	$: defineEx('swrite', 'sw', nothing);

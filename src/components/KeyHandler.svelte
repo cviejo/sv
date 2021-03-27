@@ -4,7 +4,7 @@
 	import { append, pipe, reject, reverse, thunkify } from 'ramda';
 	import { preventDefault, stopPropagation } from '../utils/dom.js';
 	import { sortByDistance, idEq } from '../utils/relation.js';
-	import { next } from '../utils/array.js';
+	import { next } from '../utils/list.js';
 	import { nothing } from '../utils/function.js';
 	import { move } from '../utils/graph.js';
 	import { focus, cursor, mode, focused, selection, nodes } from '../stores.js';
@@ -15,7 +15,7 @@
 
 	const editor = getContext('editor');
 
-	const modeEquals = thunkify((x) => $mode === x);
+	const modeEquals = thunkify(x => $mode === x);
 
 	const setMode = thunkify(mode.set);
 
@@ -23,7 +23,7 @@
 
 	const graphEmpty = () => !$nodes.length;
 
-	const word = thunkify((direction) => {
+	const word = thunkify(direction => {
 		const sort = pipe(reject(whereEq($cursor)), append($cursor), sortByDistance, direction);
 		const list = sort($nodes);
 
@@ -46,8 +46,8 @@
 		/* cursor.update((x) => ({ x: x.x + node.width, y: x.y + node.height })); */
 	};
 
-	const moveNode = thunkify((x) => {
-		buf((id) => {
+	const moveNode = thunkify(x => {
+		buf(id => {
 			const node = $nodes.find(idEq(id));
 			if (node) {
 				node.update(move(x));
@@ -57,7 +57,7 @@
 		updateCursor(x)();
 	});
 
-	const buf = (fn) => ($selection.length ? $selection : [$focused]).forEach(fn);
+	const buf = fn => ($selection.length ? $selection : [$focused]).forEach(fn);
 
 	const keydown = cond([
 		[whereEq({ key: 'w', ctrlKey: true }), pipe(stopPropagation, focus.next)],
@@ -71,11 +71,11 @@
 		[whereEq({ key: 'h', ctrlKey: true }), moveNode({ x: -step })],
 		[whereEq({ key: 'j', ctrlKey: true }), moveNode({ y: step })],
 		[whereEq({ key: 'k', ctrlKey: true }), moveNode({ y: -step })],
-		[whereEq({ key: 'x' }), () => buf((x) => nodes.remove(x))],
+		[whereEq({ key: 'x' }), () => buf(x => nodes.remove(x))],
 		/* [whereEq({ key: 'i' }), pipe(preventDefault, setMode('insert'))], */
 		[
 			whereEq({ key: 'i' }),
-			when(modeEquals('normal'), (x) => {
+			when(modeEquals('normal'), x => {
 				if ($focused) {
 					preventDefault(x);
 					const { spec } = $nodes.find(idEq($focused));
@@ -97,7 +97,10 @@
 		[whereEq({ key: 'w' }), unless(graphEmpty, word(reverse))],
 		[whereEq({ key: 'b' }), unless(graphEmpty, word(identity))],
 		[whereEq({ key: 'V' }), setMode('visual-line')],
-		[whereEq({ key: 'o' }), pipe(preventDefault, updateCursor({ y: step * 2 }), setMode('insert'))],
+		[
+			whereEq({ key: 'o' }),
+			pipe(preventDefault, updateCursor({ y: step * 2 }), setMode('insert')),
+		],
 	]);
 </script>
 

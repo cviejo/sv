@@ -1,13 +1,15 @@
 <script>
-	import { mergeRight, tap, ap, map, pipe, prop } from 'ramda';
+	import { tap, map, pipe } from 'ramda';
 	import { onMount } from 'svelte';
 	import IO from './IO.svelte';
 	import DefaultContent from './DefaultContent.svelte';
 	import MouseHandler from './MouseHandler.svelte';
-	import { bindAll } from '../../utils/object.js';
+	import { bindAll, pickWith, mergeResult } from '../../utils/object.js';
 	import { fill } from '../../utils/relation.js';
 	import { pipeP } from '../../utils/function.js';
-	import { getSize, resetSize } from '../../utils/impure.js';
+	import { S_ } from '../../utils/combinators.js';
+	import { append } from '../../utils/string.js';
+	import { getSize, resetSize, setSize } from '../../utils/impure.js';
 	import { runCode } from '../../utils/graph.js';
 	import { nodes, selection } from '../../stores.js';
 	import { sizes } from '../../config.js';
@@ -18,16 +20,17 @@
 
 	const { assign } = bindAll(node);
 
-	/* const callWithId = safe(applyTo(id)); */
+	const fillSize = fill(sizes.step);
 
-	const updateSize = pipe(prop('id'), getSize, map(fill(sizes.step)));
+	const resize = S_(setSize, pickWith(['width', 'height'], append('px')));
 
-	/* const setSize = curry((size, node) => assign(byId(node.id).style, size)); */
-	/* const resize =  */
+	const adjustSize = pipe(getSize, map(fillSize));
 
-	const runUi = pipe(x => (x.ui(x.id), x), ap(mergeRight, updateSize), assign);
+	const callUi = x => (x.ui(x.id), x);
 
-	const run = pipeP(tap(resetSize), runCode, runUi);
+	const runUi = pipe(callUi, mergeResult(adjustSize), tap(resize), assign);
+
+	const run = pipeP(tap(resetSize), mergeResult(runCode), runUi);
 
 	$: ({ spec, updated } = $node);
 
