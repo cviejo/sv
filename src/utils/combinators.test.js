@@ -1,6 +1,9 @@
 /* eslint-disable no-undef */
 import { concat, toUpper } from 'ramda';
-import { pipeP, S, S_ } from './combinators';
+import { pipeP } from './function';
+import { S, S_ } from './combinators';
+
+const delay = x => new Promise(r => setTimeout(() => r(x), 10));
 
 test('S', () => expect(S(concat, toUpper, 'Ap')).toEqual('ApAP'));
 

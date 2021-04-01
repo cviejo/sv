@@ -11,8 +11,6 @@ const dotPath = useWith(path, [split('.'), I]);
 
 const mergeResult = S(mergeRight);
 
-const pickRename = curry((keys, obj) => pick(valuesIn(keys), renameKeys(keys, obj)));
-
 const pickWith = curry((props, fn, x) => pipe(pick(props), map(fn))(x));
 
 const propOrKey = curry((key, x) => propOr(key, key, x));
@@ -20,6 +18,8 @@ const propOrKey = curry((key, x) => propOr(key, key, x));
 const renameKeys = curry((keys, obj) =>
 	toPairsIn(obj).reduce((acc, [key, value]) => ({ ...acc, [propOrKey(key, keys)]: value }), {})
 );
+
+const pickRename = curry((keys, obj) => pick(valuesIn(keys), renameKeys(keys, obj)));
 
 const safe = unless(isNil);
 
