@@ -1,5 +1,5 @@
 import { whereEq, unless, append, reject, pipe } from 'ramda';
-import { writable } from 'svelte/store';
+import writable from './writable.js';
 import { findEq } from '../utils/list.js';
 
 const { subscribe, update } = writable([]);

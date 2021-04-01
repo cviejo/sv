@@ -1,5 +1,3 @@
-import { writable, get } from 'svelte/store';
+import writable from './writable.js';
 
-const mode = { ...writable('normal'), get: () => get(mode) };
-
-export default mode;
+export default writable('normal');

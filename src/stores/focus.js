@@ -1,5 +1,5 @@
 import { curry, pipe, __, prop, tap, nth, indexOf } from 'ramda';
-import { writable, get } from 'svelte/store';
+import writable from './writable.js';
 import { safe } from '../utils/object.js';
 import { findByProp } from '../utils/list.js';
 
@@ -13,11 +13,9 @@ const findById = findByProp('id', __, targets);
 
 const nextIndex = x => (x + 1) % targets.length;
 
-const getFocus = () => get(store);
-
 const set = pipe(findById, safe(pipe(focusNode, store.set)));
 
-const next = pipe(getFocus, indexOf(__, targets), nextIndex, nth(__, targets), prop('id'), set);
+const next = pipe(store.get, indexOf(__, targets), nextIndex, nth(__, targets), prop('id'), set);
 
 const register = curry((node, id) => {
 	['addEventListener', 'on']
