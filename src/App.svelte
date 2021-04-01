@@ -11,7 +11,7 @@
 
 	import './dummy.js';
 
-	let editor = null;
+	let edit = {};
 
 	const nodeProps = spec => ({ ...$cursor, spec });
 
@@ -19,7 +19,7 @@
 
 	const onSpec = pipe(path('detail.value'), nodeProps, nodes.add, setMode('normal'));
 
-	setContext('editor', { editSpec: x => editor.editSpec(x) });
+	setContext('edit', (...args) => edit(...args));
 
 	onMount(() => Split(['.left', '.right'], { sizes: [65, 35] }));
 </script>
@@ -58,7 +58,7 @@
 	<Canvas />
 </div>
 <div class="right split">
-	<Editor bind:this={editor} />
+	<Editor bind:edit />
 </div>
 
 <KeyHandler />

@@ -1,26 +1,18 @@
 <script>
-	import { pipe, __, tap, propEq } from 'ramda';
-	import { focus, nodes } from '../../stores.js';
+	import { pipe, __, tap } from 'ramda';
+	import { focus } from '../../stores.js';
 	import { format } from '../../utils/prettier.js';
 	import { bindAll } from '../../utils/object.js';
 	import { nothing } from '../../utils/function.js';
 	import { codemirror, fromTextArea, setSize, defineEx } from './codemirror.js';
 
 	let editor = codemirror();
+	let callback = nothing;
 
-	let spec = { code: '' };
-
-	export function editSpec(x) {
-		spec = x;
-		setValue(format(spec.code));
+	export function edit(code, cb = nothing) {
+		callback = cb;
+		setValue(format(code));
 	}
-
-	const updateNode = x => x.assign({ updated: Date.now() });
-
-	const updateSpec = code => {
-		spec.code = code;
-		nodes.filter(propEq('spec', spec.name)).forEach(updateNode);
-	};
 
 	const setEditor = tap(x => (editor = x));
 
@@ -30,7 +22,7 @@
 
 	$: ({ setValue, getValue } = bindAll(editor));
 
-	$: onChange = pipe(nothing, getValue, format, tap(setValue), updateSpec);
+	$: onChange = pipe(nothing, getValue, format, tap(setValue), callback);
 
 	$: defineEx('write', 'w', onChange);
 	$: defineEx('swrite', 'sw', nothing);
@@ -58,22 +50,8 @@
 <div><textarea use:init /></div>
 
 <!--
-
-
-
-
-
-
-
-
-
-	/* const update = pipe( 
-	 	propEq('spec'), 
-	 	nodes.filter, 
-	 	forEach((x) => x.assign({ updated: Date.now() })) 
-	 ); */
 	// TODO scroll after format, example:
 	/* const { left, top } = editor.getScrollInfo(); 
 	 editor.setValue((value = new_value)); 
 	 editor.scrollTo(left, top); */
-	-->
+-->
