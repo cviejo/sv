@@ -8,10 +8,11 @@
 	import KeyHandler from './components/KeyHandler.svelte';
 	import { cursor, mode, nodes } from './stores.js';
 	import { path } from './utils/object.js';
+	import { nothing } from './utils/function.js';
 
 	import './dummy.js';
 
-	let edit = {};
+	let edit = nothing;
 
 	const nodeProps = spec => ({ ...$cursor, spec });
 

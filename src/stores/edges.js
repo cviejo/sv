@@ -1,6 +1,6 @@
 import { whereEq, unless, append, reject, pipe } from 'ramda';
-import writable from './writable.js';
 import { findEq } from '../utils/list.js';
+import writable from './writable.js';
 
 const { subscribe, update } = writable([]);
 

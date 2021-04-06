@@ -1,21 +1,10 @@
 <script>
-	import { pickRename } from '../../utils/object.js';
 	import { assign } from '../../utils/impure.js';
 
 	export let items;
 	export let selected;
 
-	/* const rect = pickRename({ */
-	/* 	offsetWidth: 'width', */
-	/* 	offsetHeight: 'height', */
-	/* 	offsetLeft: 'left', */
-	/* 	offsetTop: 'top', */
-	/* }); */
-
-	const position = (node, io) => assign(io, { node });
-
-	/* const position = (node, io) => assign(io, rect(node)); */
-	/* const log = (x) => console.log(x, rect(x)); */
+	const position = (elem, item) => assign(item, { elem });
 </script>
 
 <style>
