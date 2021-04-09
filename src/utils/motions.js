@@ -1,6 +1,10 @@
 import { sortBy, curry, useWith, map } from 'ramda';
+import { sizes } from '../config.js';
 import { distance } from './relation';
+import { move } from './graph';
 import { I } from './combinators';
+
+const bottomRight = x => move({ x: x.width - sizes.step, y: x.height - sizes.step }, x);
 
 const next = curry((distanceToOrigin, loc, locs) => {
 	const posDistance = distanceToOrigin(loc);
@@ -10,8 +14,6 @@ const next = curry((distanceToOrigin, loc, locs) => {
 
 	return node || sorted[0] || loc;
 });
-
-const bottomRight = x => ({ x: x.x + x.width, y: x.y + x.height });
 
 const word = next(distance({ x: -1, y: 0 }));
 

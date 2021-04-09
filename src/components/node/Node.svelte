@@ -16,7 +16,7 @@
 
 	export let id;
 
-	const node = nodes.get(id);
+	const node = nodes.byId(id);
 
 	const { assign } = bindAll(node);
 

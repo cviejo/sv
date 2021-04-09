@@ -1,5 +1,5 @@
 <script>
-	import { mode, visual } from '../stores.js';
+	import { visual } from '../stores.js';
 </script>
 
 <style>
@@ -9,7 +9,5 @@
 	}
 </style>
 
-{#if /^visual/.test($mode)}
-	<div
-		style="left: {$visual.left}px; top: {$visual.top}px; width: {$visual.width}px; height: {$visual.height}px;" />
-{/if}
+<div
+	style="left: {$visual.left}px; top: {$visual.top}px; width: {$visual.width}px; height: {$visual.height}px;" />

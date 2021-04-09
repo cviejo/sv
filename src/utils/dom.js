@@ -1,12 +1,28 @@
 import { invoker } from 'ramda';
+import { pickRename } from './object';
 
 const stopPropagation = invoker(0, 'stopPropagation');
 
 const preventDefault = invoker(0, 'preventDefault');
 
-const elementCenter = x => ({
-	x: x.offsetParent.offsetLeft + x.offsetLeft + x.offsetWidth / 2,
-	y: x.offsetParent.offsetTop + x.offsetTop + x.offsetHeight / 2,
+const offset = pickRename({
+	offsetTop: 'top',
+	offsetLeft: 'left',
+	offsetWidth: 'width',
+	offsetHeight: 'height',
 });
 
-export { stopPropagation, preventDefault, elementCenter };
+const rect = elem => {
+	const { top, left, width, height } = offset(elem);
+	const parent = offset(elem.offsetParent);
+
+	return { x: parent.left + left, y: parent.top + top, width, height };
+};
+
+const center = elem => {
+	const { x, y, width, height } = rect(elem);
+
+	return { x: x + width / 2, y: y + height / 2 };
+};
+
+export { stopPropagation, preventDefault, rect, center };

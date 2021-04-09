@@ -5,7 +5,7 @@ import edges from './edges.js';
 
 let graph = [];
 
-const node = (x) =>
+const node = x =>
 	proxy({
 		...x,
 		updated: null,
@@ -35,10 +35,10 @@ const nodes = proxy({
 
 		this.changed();
 	},
-	filter: (fn) => graph.filter(fn),
-	find: (fn) => graph.find(fn),
-	get: (id) => graph.find(idEq(id)),
-	notify: (listener) => listener(graph),
+	filter: fn => graph.filter(fn),
+	find: fn => graph.find(fn),
+	byId: id => graph.find(idEq(id)),
+	notify: listener => listener(graph),
 });
 
 export default nodes;

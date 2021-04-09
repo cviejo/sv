@@ -1,11 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-	import { nodes, focus, edges } from '../stores.js';
+	import { mode, nodes, focus, edges } from '../stores.js';
 	import panzoom from '../utils/panzoom.js';
 	import { sizes } from '../config.js';
 	import Node from './node/Node.svelte';
 	import Grid from './grid/Grid.svelte';
 	import Cursor from './Cursor.svelte';
+	import Connect from './Connect.svelte';
 	import Edge from './Edge.svelte';
 	import Visual from './Visual.svelte';
 
@@ -39,7 +40,11 @@
 		{#each $nodes as { id } (id)}
 			<Node {id} />
 		{/each}
-		<Visual />
 		<Cursor />
+		{#if /^visual/.test($mode)}
+			<Visual />
+		{:else if $mode === 'connect'}
+			<Connect />
+		{/if}
 	</div>
 </div>
