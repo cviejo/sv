@@ -1,4 +1,5 @@
 // import { tick } from 'svelte';
+import { take } from 'ramda';
 import { forEachAsync } from './utils/function.js';
 import { addNode } from './utils/graph.js';
 
@@ -7,16 +8,28 @@ import edges from './stores/edges.js';
 const graph = {
 	nodes: [
 		{
-			id: '0',
+			id: 'ping',
 			x: 0,
 			y: 0,
-			spec: 'nexus/sequencer',
+			spec: 'ping',
 		},
 		{
 			id: '1a',
 			x: 250,
 			y: 200,
 			spec: 'pre',
+		},
+		{
+			id: '1b',
+			x: 350,
+			y: 300,
+			spec: 'pre',
+		},
+		{
+			id: '0',
+			x: 0,
+			y: 0,
+			spec: 'nexus/sequencer',
 		},
 		{
 			id: '00',
@@ -45,7 +58,7 @@ const graph = {
 	],
 	edges: [
 		{
-			from: '0',
+			from: 'ping',
 			outlet: 1,
 			to: '1a',
 			inlet: 0,
@@ -53,6 +66,6 @@ const graph = {
 	],
 };
 
-forEachAsync(addNode, [graph.nodes[0], graph.nodes[1]]).then(() => {
-	graph.edges.forEach((x) => edges.add(x));
+forEachAsync(addNode, take(3, graph.nodes)).then(() => {
+	graph.edges.forEach(x => edges.add(x));
 });

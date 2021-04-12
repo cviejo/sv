@@ -39,6 +39,16 @@ ui((node) => {
 		`,
 	},
 	{
+		name: 'ping',
+		code: `
+outlet();
+const out = outlet();
+
+setInterval(() => out(Date.now()), 1000);
+		`,
+	},
+
+	{
 		name: 'nexus/sequencer',
 		code: `
 			outlet();
@@ -46,7 +56,7 @@ ui((node) => {
 
 			// import nexus from 'https://cdn.skypack.dev/nexusui';
 			ui((node) => {
-			// console.log("node", node);
+				// console.log("node", node);
 
 				node.innerHTML = '';
 				new nexus.Sequencer(node, {
