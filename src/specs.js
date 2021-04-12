@@ -46,7 +46,7 @@ ui((node) => {
 
 			// import nexus from 'https://cdn.skypack.dev/nexusui';
 			ui((node) => {
-			console.log("node", node);
+			// console.log("node", node);
 
 				node.innerHTML = '';
 				new nexus.Sequencer(node, {

@@ -33,8 +33,8 @@
 	<div class="board" style="--grid-size({sizes.grid}px)" use:panzoom>
 		<Grid />
 		<svg preserveAspectRatio="none" width={sizes.grid} height={sizes.grid}>
-			{#each $edges as x (x)}
-				<Edge {...x} />
+			{#each $edges as edge (edge.id)}
+				<Edge {edge} />
 			{/each}
 		</svg>
 		{#each $nodes as { id } (id)}

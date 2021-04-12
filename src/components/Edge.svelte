@@ -1,33 +1,31 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { nodes } from '../stores.js';
 	import { center } from '../utils/dom';
 
-	export let from;
-	export let to;
-	export let outlet;
-	export let inlet;
+	export let edge;
 
 	let d = '';
 
-	const source = nodes.byId(from);
-	const target = nodes.byId(to);
+	const update = (a, b) => {
+		const mod = Math.abs(b.y - b.y) / 2.2;
+		d = `M ${a.x},${a.y} C ${a.x},${a.y + mod} ${b.x},${b.y - mod} ${b.x},${b.y}`;
+	};
 
-	$: sourceIO = $source.outlets[outlet];
-	$: targetIO = $target.inlets[inlet];
+	const from = nodes.byId(edge.from);
+	const to = nodes.byId(edge.to);
 
-	$: if (sourceIO.elem && targetIO.elem) {
-		const { x: x1, y: y1 } = center(sourceIO.elem);
-		const { x: x2, y: y2 } = center(targetIO.elem);
+	$: outlet = $from.outlets[edge.outlet];
+	$: inlet = $to.inlets[edge.inlet];
 
-		const mod = Math.abs(y2 - y1) / 2.2;
-
-		d = `M ${x1},${y1} C ${x1},${y1 + mod} ${x2},${y2 - mod} ${x2},${y2}`;
+	$: if (outlet.elem && inlet.elem) {
+		tick().then(() => update(center(outlet.elem), center(inlet.elem)));
 	}
 
-	// don't remember why this is here 🤔
 	onMount(() => {
-		sourceIO.stream.map(targetIO.stream);
+		const stream = outlet.stream.map(inlet.stream);
+
+		return () => stream.end(1);
 	});
 </script>
 

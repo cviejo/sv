@@ -1,8 +1,11 @@
 import { pipe, prop, curry, useWith } from 'ramda';
+import { v4 as uuid } from 'uuid';
 import { pickRename } from './object';
 import { I } from './combinators';
 
 const byId = x => document.getElementById(x);
+
+const withId = x => ({ id: uuid(), ...x });
 
 const element = pipe(prop('id'), byId);
 
@@ -16,4 +19,4 @@ const setSize = useWith(assign, [I, style]);
 
 const resetSize = setSize({ width: '', height: '' });
 
-export { byId, assign, getSize, setSize, resetSize };
+export { byId, assign, getSize, setSize, resetSize, withId };

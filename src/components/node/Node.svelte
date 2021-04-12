@@ -1,5 +1,5 @@
 <script>
-	import { tap, map, pipe } from 'ramda';
+	import { either, whereEq, prop, tap, map, pipe, forEach } from 'ramda';
 	import { onMount } from 'svelte';
 	import IO from './IO.svelte';
 	import DefaultContent from './DefaultContent.svelte';
@@ -11,7 +11,7 @@
 	import { append } from '../../utils/string.js';
 	import { getSize, resetSize, setSize } from '../../utils/impure.js';
 	import { runCode } from '../../utils/graph.js';
-	import { nodes, selection } from '../../stores.js';
+	import { nodes, selection, edges } from '../../stores.js';
 	import { sizes } from '../../config.js';
 
 	export let id;
@@ -28,9 +28,13 @@
 
 	const callUi = x => (x.ui(x.id), x);
 
+	const connections = id => $edges.filter(either(whereEq({ from: id }), whereEq({ to: id })));
+
+	const reconnect = pipe(prop('id'), connections, tap(forEach(edges.remove)), forEach(edges.add));
+
 	const runUi = pipe(callUi, mergeResult(adjustSize), tap(resize), assign);
 
-	const run = pipeP(tap(resetSize), mergeResult(runCode), runUi);
+	const run = pipeP(tap(resetSize), mergeResult(runCode), runUi, reconnect);
 
 	$: ({ spec, updated } = $node);
 
