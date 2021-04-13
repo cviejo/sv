@@ -1,6 +1,5 @@
 <script>
 	import { either, whereEq, prop, tap, map, pipe, forEach } from 'ramda';
-	import { onMount } from 'svelte';
 	import IO from './IO.svelte';
 	import DefaultContent from './DefaultContent.svelte';
 	import MouseHandler from './MouseHandler.svelte';
@@ -26,15 +25,21 @@
 
 	const adjustSize = pipe(getSize, map(fillSize));
 
-	const callUi = x => (x.ui(x.id), x);
+	const callUi = tap(x => x.ui(x.id));
 
 	const connections = id => $edges.filter(either(whereEq({ from: id }), whereEq({ to: id })));
 
-	const reconnect = pipe(prop('id'), connections, tap(forEach(edges.remove)), forEach(edges.add));
+	const disconnect = pipe(prop('id'), connections, tap(forEach(edges.remove)));
 
 	const runUi = pipe(callUi, mergeResult(adjustSize), tap(resize), assign);
 
-	const run = pipeP(tap(resetSize), mergeResult(runCode), runUi, reconnect);
+	const update = async x => {
+		const temp = disconnect(x);
+		await runUi(x);
+		temp.forEach(edges.add);
+	};
+
+	const run = pipeP(tap(resetSize), mergeResult(runCode), update);
 
 	$: ({ spec, updated } = $node);
 
@@ -42,7 +47,7 @@
 
 	$: updated && run(node);
 
-	onMount(() => runUi(node));
+	run(node);
 </script>
 
 <div style="overflow: hidden; position: absolute; top: {$node.y - 4}px; left: {$node.x}px; ">

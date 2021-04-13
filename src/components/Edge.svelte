@@ -5,22 +5,22 @@
 
 	export let edge;
 
-	let d = '';
+	let path = '';
 
 	const update = (a, b) => {
-		const mod = Math.abs(b.y - b.y) / 2.2;
-		d = `M ${a.x},${a.y} C ${a.x},${a.y + mod} ${b.x},${b.y - mod} ${b.x},${b.y}`;
+		const mod = Math.abs(b.y - a.y) / 2.2;
+		path = `M ${a.x},${a.y} C ${a.x},${a.y + mod} ${b.x},${b.y - mod} ${b.x},${b.y}`;
 	};
 
 	const from = nodes.byId(edge.from);
 	const to = nodes.byId(edge.to);
 
+	// node as store to react to position changes
 	$: outlet = $from.outlets[edge.outlet];
 	$: inlet = $to.inlets[edge.inlet];
 
-	$: if (outlet.elem && inlet.elem) {
-		tick().then(() => update(center(outlet.elem), center(inlet.elem)));
-	}
+	// tick to finish both nodes move
+	$: tick().then(() => update(center(outlet.elem), center(inlet.elem)));
 
 	onMount(() => {
 		const stream = outlet.stream.map(inlet.stream);
@@ -37,6 +37,6 @@
 	}
 </style>
 
-{#if d}
-	<path {d} />
+{#if path}
+	<path d={path} />
 {/if}

@@ -1,10 +1,7 @@
-import { concat, prop, clamp, pipe, add, mergeWith, mergeRight, bind } from 'ramda';
+import { concat, prop, clamp, pipe, add, mergeWith } from 'ramda';
 import { sizes } from '../config.js';
-import nodes from '../stores/nodes.js';
 import specs from '../specs.js';
 import { remove } from './string.js';
-import { pipeP } from './function.js';
-import { S } from './combinators.js';
 
 const addHeader = x => `
 	const __cacheBust__ = ${Date.now()};
@@ -47,6 +44,4 @@ const specCode = pipe(specs.get, prop('code'), cleanCode, addHeader);
 
 const runCode = pipe(prop('spec'), specCode, dataUri, load);
 
-const addNode = pipeP(S(mergeRight, runCode), bind(nodes.add, nodes));
-
-export { move, limit, runCode, addNode };
+export { move, limit, runCode /* , addNode */ };
