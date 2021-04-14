@@ -1,7 +1,8 @@
 // import { tick } from 'svelte';
 import { take } from 'ramda';
 import { forEachAsync } from './utils/function.js';
-import { addNode } from './utils/graph.js';
+// import { addNode } from './utils/graph.js';
+import { nodes } from './stores.js';
 
 import edges from './stores/edges.js';
 
@@ -66,6 +67,6 @@ const graph = {
 	],
 };
 
-forEachAsync(addNode, take(3, graph.nodes)).then(() => {
-	graph.edges.forEach(x => edges.add(x));
+forEachAsync(x => nodes.add(x), take(3, graph.nodes)).then(() => {
+	setTimeout(() => graph.edges.forEach(x => edges.add(x)), 300);
 });

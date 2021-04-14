@@ -1,12 +1,29 @@
-// import { reduxify } from 'svelte-reduxify';
-import { pathNotEq, idEq } from '../utils/relation.js';
+import { pathNotEq, idEq, notEquals } from '../utils/relation.js';
 import { nothing } from '../utils/function.js';
-import proxy from './proxy.js';
 import edges from './edges.js';
 
 let graph = [];
 
 const find = fn => graph.find(fn);
+
+const proxy = x => ({
+	listeners: [],
+	subscribe(fn) {
+		this.listeners.push(fn);
+		this.notify(fn);
+
+		return () => this.unsubscribe(fn);
+	},
+	unsubscribe(fn) {
+		this.listeners = this.listeners.filter(notEquals(fn));
+	},
+	changed() {
+		// can't do forEach(this.smth), this binding will change later
+		this.listeners.forEach(x => this.notify(x));
+	},
+	notify() {},
+	...x,
+});
 
 const node = x =>
 	proxy({

@@ -25,13 +25,13 @@
 
 	const adjustSize = pipe(getSize, map(fillSize));
 
-	const callUi = tap(x => x.ui(x.id));
+	const ui = x => x.ui(x.id);
 
 	const connections = id => $edges.filter(either(whereEq({ from: id }), whereEq({ to: id })));
 
 	const disconnect = pipe(prop('id'), connections, tap(forEach(edges.remove)));
 
-	const runUi = pipe(callUi, mergeResult(adjustSize), tap(resize), assign);
+	const runUi = pipe(tap(ui), mergeResult(adjustSize), tap(resize), assign);
 
 	const update = async x => {
 		const temp = disconnect(x);
