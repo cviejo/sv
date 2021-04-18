@@ -1,22 +1,21 @@
 <script>
 	import { onMount, setContext } from 'svelte';
-	import { pipe, thunkify } from 'ramda';
+	import { pipe } from 'ramda';
 	import Split from 'split.js';
 	import Canvas from './components/Canvas.svelte';
 	import Test from './components/Test.svelte';
 	import Editor from './components/editor/Editor.svelte';
 	import KeyHandler from './components/KeyHandler.svelte';
-	import { cursor, mode, nodes } from './stores.js';
+	import { mode, cursor, nodes } from './stores.js';
 	import { path } from './utils/object.js';
 	import { nothing } from './utils/function.js';
+	import { setMode } from './utils/thunks.js';
 
 	import './dummy.js';
 
 	let edit = nothing;
 
 	const nodeProps = spec => ({ ...$cursor, spec });
-
-	const setMode = thunkify(mode.set);
 
 	const onSpec = pipe(path('detail.value'), nodeProps, nodes.add, setMode('normal'));
 

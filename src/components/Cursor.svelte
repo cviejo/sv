@@ -3,6 +3,7 @@
 	import { sizes } from '../config.js';
 
 	const colors = {
+		connect: 'rgba(163, 190, 140, 0.2)',
 		insert: 'rgb(143, 161, 179)',
 		normal: 'rgb(163, 190, 140)',
 		visual: 'rgb(180, 142, 175)',
