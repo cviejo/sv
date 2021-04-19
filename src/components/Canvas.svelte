@@ -2,13 +2,23 @@
 	import { onMount } from 'svelte';
 	import { mode, nodes, focus, edges } from '../stores.js';
 	import panzoom from '../utils/panzoom.js';
-	import { sizes } from '../config.js';
+	import { sizes, svg } from '../config.js';
 	import Node from './node/Node.svelte';
 	import Grid from './grid/Grid.svelte';
 	import Cursor from './Cursor.svelte';
 	import Connect from './Connect.svelte';
+	import To from './To.svelte';
 	import Edge from './Edge.svelte';
 	import Visual from './Visual.svelte';
+
+	const modals = {
+		visual: Visual,
+		'visual-line': Visual,
+		connect: Connect,
+		to: To,
+	};
+
+	$: modal = modals[$mode];
 
 	onMount(() => focus.set('graph'));
 </script>
@@ -32,7 +42,7 @@
 <div class="wrapper" use:focus.register={'graph'}>
 	<div class="board" style="--grid-size({sizes.grid}px)" use:panzoom>
 		<Grid />
-		<svg preserveAspectRatio="none" width={sizes.grid} height={sizes.grid}>
+		<svg {...svg}>
 			{#each $edges as edge (edge.id)}
 				<Edge {edge} />
 			{/each}
@@ -41,10 +51,6 @@
 			<Node {id} />
 		{/each}
 		<Cursor />
-		{#if /^visual/.test($mode)}
-			<Visual />
-		{:else if $mode === 'connect'}
-			<Connect />
-		{/if}
+		<svelte:component this={modal} />
 	</div>
 </div>
