@@ -9,9 +9,9 @@
 
 	const bottomLeft = x => ({ x: x.x, y: x.y + x.height });
 
-	const ioPos = pipe(rect, bottomLeft);
+	const position = pipe(rect, bottomLeft);
 
-	const hint = curry((id, io, index) => ({ id, index, ...ioPos(io.elem) }));
+	const hint = curry((id, io, index) => ({ id, index, ...position(io.elem) }));
 
 	const ios = (type, xs) => xs.flatMap(x => x[type].map(hint(x.id)));
 
@@ -20,7 +20,7 @@
 			from = x;
 			items = ios('inlets', $nodes);
 		} else {
-			edges.add({
+			edges.toggle({
 				from: from.id,
 				outlet: from.index,
 				to: x.id,

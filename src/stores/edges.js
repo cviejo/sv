@@ -1,4 +1,4 @@
-import { whereEq, when, append, reject, pipe, curry, path, unless } from 'ramda';
+import { whereEq, when, append, reject, pipe, curry, path, ifElse, unary } from 'ramda';
 import { findEq } from '../utils/list.js';
 import { withId } from '../utils/impure.js';
 import nodes from './nodes';
@@ -14,14 +14,14 @@ const inlet = x => path(['inlets', x.inlet], nodes.byId(x.to));
 
 const valid = curry((x, edges) => !findEq(x, edges) && outlet(x) && inlet(x));
 
-// const add = x => update(when(valid(x), a => (console.log('added', a), appenWithId(x, a))));
 const add = x => update(when(valid(x), appenWithId(x)));
-// const add = x => update(unless(findEq(x), appenWithId(x)));
 
 const remove = pipe(whereEq, reject, update);
 
-const find = x => get().filter(whereEq(x));
+const find = x => findEq(x, get());
 
-const edges = { subscribe, add, remove, get, find };
+const toggle = ifElse(find, unary(remove), add);
+
+const edges = { subscribe, add, remove, get, toggle };
 
 export default edges;
