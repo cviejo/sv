@@ -1,7 +1,8 @@
-import { concat, prop, clamp, pipe, add, mergeWith } from 'ramda';
+import { concat, prop, clamp, pipe, add, pick, mergeWith, useWith } from 'ramda';
 import { sizes } from '../config.js';
 import specs from '../specs.js';
 import { remove } from './string.js';
+import { I } from './combinators.js';
 
 const addHeader = x => `
 	const __cacheBust__ = ${Date.now()};
@@ -38,10 +39,14 @@ const load = x => import(x);
 
 const limit = clamp(0, sizes.grid - sizes.step);
 
-const move = mergeWith(pipe(add, limit));
+const pickPoint = pick(['x', 'y']);
+
+const mergeWithAdd = mergeWith(pipe(add, limit));
+
+const moveBy = useWith(mergeWithAdd, [pickPoint, I]);
 
 const specCode = pipe(specs.get, prop('code'), cleanCode, addHeader);
 
 const runCode = pipe(prop('spec'), specCode, dataUri, load);
 
-export { move, limit, runCode /* , addNode */ };
+export { moveBy, pickPoint, limit, runCode /* , addNode */ };

@@ -1,20 +1,20 @@
 <script>
 	import { cond, whereEq, prop, thunkify } from 'ramda';
-	import { mode } from '../stores.js';
+	import { setMode } from '../utils/thunks.js';
 	import Select from 'svelte-select';
 	import specs from '../specs.js';
 
 	let select;
 
 	let props = {
-		items: specs.data.map((x) => ({ value: x.name, label: x.name, group: x.group })),
+		items: specs.data.map(x => ({ value: x.name, label: x.name, group: x.group })),
 		listOpen: true,
 		listAutoWidth: false,
 		placeholder: '',
 		groupBy: prop('group'),
 	};
 
-	const dispatchKeyDown = thunkify((key) =>
+	const dispatchKeyDown = thunkify(key =>
 		select.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key }))
 	);
 
@@ -27,20 +27,20 @@
 <style>
 	.cover {
 		background-color: rgba(0, 0, 0, 0.6);
-		height: 100%;
-		left: 0px;
 		position: absolute;
+		left: 0px;
 		top: 0px;
 		width: 100%;
+		height: 100%;
 		z-index: 100;
 	}
 	.theme {
 		background-color: var(--background-dark);
-		height: 20em;
-		left: calc(50% - 10em);
 		position: absolute;
 		top: 4em;
+		left: calc(50% - 10em);
 		width: 20em;
+		height: 20em;
 		--background: var(--background-light);
 		--border: 0px solid black;
 		--borderRadius: 0px;
@@ -59,7 +59,7 @@
 	}
 </style>
 
-<div class="cover" on:click={() => ($mode = 'normal')}>
+<div class="cover" on:click={setMode('normal')}>
 	<div class="theme" bind:this={select} on:keydown|capture={keydown}>
 		<Select {...props} on:select />
 	</div>

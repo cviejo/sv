@@ -1,10 +1,10 @@
 import { sortBy, curry, useWith, map } from 'ramda';
 import { sizes } from '../config.js';
 import { distance } from './relation';
-import { move } from './graph';
+import { moveBy } from './graph';
 import { I } from './combinators';
 
-const bottomRight = x => move({ x: x.width - sizes.step, y: x.height - sizes.step }, x);
+const bottomRight = x => moveBy({ x: x.width - sizes.step, y: x.height - sizes.step }, x);
 
 const next = curry((distanceToOrigin, loc, locs) => {
 	const posDistance = distanceToOrigin(loc);
