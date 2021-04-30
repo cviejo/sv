@@ -12,6 +12,7 @@ const data = [
 		name: 'pre',
 		code: `
 const input = inlet();
+outlet();
 
 const stringify = (x) => JSON.stringify(x, null, 3);
 

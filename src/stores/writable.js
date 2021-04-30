@@ -1,8 +1,14 @@
-import { writable, get } from 'svelte/store';
+import { writable } from 'svelte/store';
 
 // just a regular writable with a getter
-export default state => {
-	const store = { ...writable(state), get: () => get(store) };
+export default initialState => {
+	let state = initialState;
 
-	return store;
+	const store = writable(initialState);
+
+	store.subscribe(x => {
+		state = x;
+	});
+
+	return { ...store, get: () => state };
 };

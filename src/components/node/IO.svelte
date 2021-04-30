@@ -1,10 +1,13 @@
 <script>
+	import { tick } from 'svelte';
 	import { assign } from '../../utils/impure.js';
+	import { offsetRect } from '../../utils/dom.js';
 
 	export let items;
 	export let selected;
 
-	const position = (elem, item) => assign(item, { elem });
+	// tick to have all ios positioned before reading the rects
+	const position = (elem, item) => tick().then(() => assign(item, offsetRect(elem)));
 </script>
 
 <style>

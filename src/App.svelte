@@ -3,21 +3,23 @@
 	import { pipe } from 'ramda';
 	import Split from 'split.js';
 	import Canvas from './components/Canvas.svelte';
-	import Test from './components/Test.svelte';
+	/* import Select from './components/Select.svelte'; */
 	import Editor from './components/editor/Editor.svelte';
 	import KeyHandler from './components/KeyHandler.svelte';
-	import { mode, cursor, nodes } from './stores.js';
 	import { path } from './utils/object.js';
 	import { nothing } from './utils/function.js';
-	import { setMode } from './utils/thunks.js';
+	import { withId } from './utils/impure.js';
+	import { /* mode, */ cursor, nodes, thunks } from './stores.js';
 
 	import './dummy.js';
 
 	let edit = nothing;
 
-	const nodeProps = spec => ({ ...$cursor, spec });
+	const nodeProps = spec => withId({ ...$cursor, spec });
 
-	const onSpec = pipe(path('detail.value'), nodeProps, nodes.add, setMode('normal'));
+	const { setMode } = thunks;
+
+	const onSpec = pipe(path('detail.value'), nodeProps, x => nodes.add(x), setMode('normal'));
 
 	setContext('edit', (...args) => edit(...args));
 
@@ -63,6 +65,8 @@
 
 <KeyHandler />
 
+<!--
 {#if $mode === 'insert'}
-	<Test on:select={onSpec} />
+	<Select on:select={onSpec} />
 {/if}
+-->

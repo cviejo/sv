@@ -1,26 +1,28 @@
 <script>
 	import { cond, whereEq, prop, thunkify } from 'ramda';
-	import { setMode } from '../utils/thunks.js';
+	import { thunks } from '../stores.js';
 	import Select from 'svelte-select';
-	import specs from '../specs.js';
+	/* const formatted = x => ({ value: x.name, label: x.name, group: x.group }); */
 
-	let select;
+	export let items = [];
+
+	let select = null;
 
 	let props = {
-		items: specs.data.map(x => ({ value: x.name, label: x.name, group: x.group })),
+		items,
 		listOpen: true,
 		listAutoWidth: false,
 		placeholder: '',
 		groupBy: prop('group'),
 	};
 
-	const dispatchKeyDown = thunkify(key =>
-		select.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key }))
-	);
+	const keyboardEvent = key => new KeyboardEvent('keydown', { key, bubbles: true });
+
+	const triggerKeydown = thunkify(key => select.dispatchEvent(keyboardEvent(key)));
 
 	const keydown = cond([
-		[whereEq({ key: 'n', ctrlKey: true }), dispatchKeyDown('ArrowDown')],
-		[whereEq({ key: 'p', ctrlKey: true }), dispatchKeyDown('ArrowUp')],
+		[whereEq({ key: 'n', ctrlKey: true }), triggerKeydown('ArrowDown')],
+		[whereEq({ key: 'p', ctrlKey: true }), triggerKeydown('ArrowUp')],
 	]);
 </script>
 
@@ -59,7 +61,7 @@
 	}
 </style>
 
-<div class="cover" on:click={setMode('normal')}>
+<div class="cover" on:click={thunks.setMode('normal')}>
 	<div class="theme" bind:this={select} on:keydown|capture={keydown}>
 		<Select {...props} on:select />
 	</div>

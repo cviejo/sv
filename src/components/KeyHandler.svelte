@@ -1,10 +1,11 @@
 <script>
-	import { getContext } from 'svelte';
-	import { when, cond, __, whereEq, pipe, thunkify, propEq } from 'ramda';
+	import { getContext, tick } from 'svelte';
+	import { when, cond, __, whereEq, chain, prop, pipe, thunkify, propEq, T } from 'ramda';
 	import { preventDefault, stopPropagation } from '../utils/dom.js';
 	import { idEq } from '../utils/relation.js';
-	import { nothing } from '../utils/function.js';
-	import { move } from '../utils/graph.js';
+	import { nothing, forEachAsync } from '../utils/function.js';
+	import { moveBy } from '../utils/graph.js';
+	import { setMode, updateCursor } from '../utils/thunks.js';
 	import { back, word, end } from '../utils/motions.js';
 	import { focus, cursor, mode, focused, selection, nodes } from '../stores.js';
 	import { sizes } from '../config.js';
@@ -14,24 +15,38 @@
 
 	const edit = getContext('edit');
 
+	const getNodes = () => $nodes;
+
 	const modeEquals = thunkify(x => $mode === x);
 
-	const setMode = thunkify(mode.set);
-
-	const updateCursor = thunkify(cursor.update);
+	const buf = fn => ($selection.length ? $selection : [$focused]).forEach(fn);
 
 	const motion = thunkify(fn => cursor.set(fn($cursor, $nodes)));
+
+	const o = pipe(preventDefault, updateCursor({ y: step * 2 }), setMode('insert'));
 
 	const moveNode = thunkify(x => {
 		buf(id => {
 			const node = $nodes.find(idEq(id));
 			if (node) {
-				node.update(move(x));
+				node.update(moveBy(x));
 			}
 		});
-
 		updateCursor(x)();
 	});
+
+	const editSpec = spec => {
+		edit(spec.code, code => {
+			/* const updateNode = x => (x.assign({ updated: Date.now() }), tick()); */
+			const updateNode = x => tick().then(() => x.assign({ updated: Date.now() }));
+			spec.code = code;
+			forEachAsync(updateNode, nodes.filter(propEq('spec', spec.name)));
+			/* .forEach(updateNode); */
+		});
+		focus.set('editor');
+	};
+
+	const inlets = pipe(getNodes, chain(prop('inlets')), console.log);
 
 	const normal = cond([
 		[whereEq({ key: 'l', ctrlKey: true }), moveNode({ x: step })],
@@ -47,15 +62,10 @@
 		[whereEq({ key: 'h' }), updateCursor({ x: -step })],
 		[whereEq({ key: 'j' }), updateCursor({ y: step })],
 		[whereEq({ key: 'k' }), updateCursor({ y: -step })],
-		[whereEq({ key: 'v' }), setMode('visual')],
-		[whereEq({ key: 'V' }), setMode('visual-line')],
 		[whereEq({ key: 'e' }), motion(end)],
 		[whereEq({ key: 'w' }), motion(word)],
 		[whereEq({ key: 'b' }), motion(back)],
-		[
-			whereEq({ key: 'o' }),
-			pipe(preventDefault, updateCursor({ y: step * 2 }), setMode('insert')),
-		],
+		[whereEq({ key: 'o' }), o],
 		/* [whereEq({ key: 'i' }), pipe(preventDefault, setMode('insert'))], */
 		[
 			whereEq({ key: 'i' }),
@@ -64,18 +74,11 @@
 					preventDefault(x);
 					const node = $nodes.find(idEq($focused));
 					const spec = specs.get(node.spec);
-					edit(spec.code, code => {
-						const updateNode = x => x.assign({ updated: Date.now() });
-						spec.code = code;
-						nodes.filter(propEq('spec', spec.name)).forEach(updateNode);
-					});
-					focus.set('editor');
+					editSpec(spec);
 				}
 			}),
 		],
 	]);
-
-	const buf = fn => ($selection.length ? $selection : [$focused]).forEach(fn);
 
 	const keydown = cond([
 		// global
@@ -85,8 +88,11 @@
 		[() => $focus.id === 'editor', nothing],
 		[whereEq({ key: 'Escape' }), setMode('normal')],
 		[modeEquals('insert'), nothing],
-		/* [modeEquals('normal'), normal], */
-		[() => true, normal],
+		[whereEq({ key: 'f' }), setMode('connect')],
+		[whereEq({ key: 't' }), setMode('to')],
+		[whereEq({ key: 'v' }), setMode('visual')],
+		[whereEq({ key: 'V' }), setMode('visual-line')],
+		[T, normal],
 	]);
 </script>
 

@@ -1,5 +1,6 @@
-import { pathNotEq, idEq, notEquals } from '../utils/relation.js';
+import { idEq, notEquals } from '../utils/relation.js';
 import { nothing } from '../utils/function.js';
+import { whereNotEq } from '../utils/object.js';
 import edges from './edges.js';
 
 let graph = [];
@@ -50,14 +51,15 @@ const nodes = proxy({
 		graph.push(node(x));
 		this.changed();
 	},
-	remove(id) {
-		edges.remove({ from: id });
-		edges.remove({ to: id });
+	remove(x) {
+		edges.remove({ from: x.id });
+		edges.remove({ to: x.id });
 
-		graph = graph.filter(pathNotEq('id', id));
+		graph = graph.filter(whereNotEq(x));
 
 		this.changed();
 	},
+	get: () => graph,
 	filter: fn => graph.filter(fn),
 	byId: id => find(idEq(id)),
 	notify: listener => listener(graph),

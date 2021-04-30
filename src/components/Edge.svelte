@@ -1,8 +1,10 @@
 <script>
 	import { onMount, tick } from 'svelte';
+	import { pipe } from 'ramda';
 	import { writable } from 'svelte/store';
 	import { nodes } from '../stores.js';
-	import { center } from '../utils/dom';
+	import { center } from '../utils/dom.js';
+	import { moveBy } from '../utils/graph.js';
 
 	export let edge;
 
@@ -19,12 +21,16 @@
 
 	const update = (a, b) => path.set(data(a, b, pathMod(a, b)));
 
+	const rect = (node, io) => moveBy({ x: node.x, y: node.y - io.height }, io);
+
+	const point = pipe(rect, center);
+
 	$: outlet = $from.outlets[edge.outlet];
 
 	$: inlet = $to.inlets[edge.inlet];
 
-	// tick to finish both node movements
-	$: tick().then(() => update(center(outlet.elem), center(inlet.elem)));
+	// tick to finish both node movements before update
+	$: tick().then(() => update(point($from, outlet), point($to, inlet)));
 
 	onMount(() => {
 		const stream = outlet.stream.map(inlet.stream);

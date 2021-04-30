@@ -23,7 +23,7 @@ const idEq = propEq('id');
 
 const between = curry((a, b, x) => lte(a, x) && gt(b, x));
 
-const withinRect = curry(
+const pointInRect = curry(
 	(point, { x, y, width, height }) =>
 		between(x, x + width, point.x) && between(y, y + height, point.y)
 );
@@ -34,4 +34,4 @@ const intersect = useWith(
 );
 
 export { dotPathEq as pathEq, idEq, fill };
-export { distance, pathNotEq, notEquals, withinRect, intersect };
+export { distance, pathNotEq, notEquals, pointInRect, intersect };

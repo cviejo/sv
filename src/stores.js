@@ -1,10 +1,22 @@
+import { thunkify } from 'ramda';
 import cursor from './stores/cursor.js';
 import edges from './stores/edges.js';
 import focus from './stores/focus.js';
 import focused from './stores/focused.js';
-import mode from './stores/mode.js';
 import nodes from './stores/nodes.js';
-import selection from './stores/selection.js';
+import mode from './stores/mode.js';
 import visual from './stores/visual.js';
+import writable from './stores/writable.js';
 
-export { mode, cursor, visual, focus, nodes, edges, selection, focused };
+const selection = writable([]);
+
+const thunks = {
+	focusEq: thunkify(x => focus.get().id === x),
+	getNodes: thunkify(nodes.get),
+	modeEq: thunkify(x => mode.get() === x),
+	setMode: thunkify(mode.set),
+	setSelection: thunkify(selection.set),
+	updateCursor: thunkify(cursor.update),
+};
+
+export { mode, cursor, visual, focus, nodes, edges, selection, focused, thunks };
