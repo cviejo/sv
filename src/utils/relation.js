@@ -1,5 +1,4 @@
-import { useWith, curry, pathEq, complement, split, equals, lte, gt } from 'ramda';
-import { propEq } from 'ramda';
+import { propEq, useWith, curry, pathEq, complement, split, equals, lte, gt } from 'ramda';
 import { I } from './combinators.js';
 
 const derivedRect = rect => ({
@@ -24,9 +23,12 @@ const idEq = propEq('id');
 const between = curry((a, b, x) => lte(a, x) && gt(b, x));
 
 const pointInRect = curry(
-	(point, { x, y, width, height }) =>
-		between(x, x + width, point.x) && between(y, y + height, point.y)
+	(point, rect) =>
+		between(rect.x, rect.x + rect.width, point.x) &&
+		between(rect.y, rect.y + rect.height, point.y)
 );
+
+const findFromPoint = (pos, xs) => xs.find(pointInRect(pos));
 
 const intersect = useWith(
 	(a, b) => !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom),
@@ -34,4 +36,4 @@ const intersect = useWith(
 );
 
 export { dotPathEq as pathEq, idEq, fill };
-export { distance, pathNotEq, notEquals, pointInRect, intersect };
+export { distance, pathNotEq, notEquals, pointInRect, findFromPoint, intersect };

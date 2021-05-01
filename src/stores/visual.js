@@ -1,4 +1,4 @@
-import { writable, derived, get } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import * as R from 'ramda';
 import mode from './mode.js';
 import cursor from './cursor.js';
@@ -13,15 +13,9 @@ const fromTo = writable([
 
 const visualMode = test(/^visual/);
 
-const getMode = () => get(mode);
-
 const visualStart = compose(fromTo.set, R.repeat(__, 2), cursor.get);
 
 const visualMove = compose(fromTo.update, R.update(1));
-
-mode.subscribe(when(visualMode, visualStart));
-
-cursor.subscribe(when(compose(visualMode, getMode), visualMove));
 
 const visual = derived([mode, fromTo], ([$mode, [from, to]]) => {
 	if (!visualMode($mode)) {
@@ -38,5 +32,9 @@ const visual = derived([mode, fromTo], ([$mode, [from, to]]) => {
 
 	return { x: left, y: top, top, left, right, bottom, width, height };
 });
+
+mode.subscribe(when(visualMode, visualStart));
+
+cursor.subscribe(when(compose(visualMode, mode.get), visualMove));
 
 export default visual;

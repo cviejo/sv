@@ -1,7 +1,7 @@
 import { pipe, cond, whereEq, thunkify, isNil, ifElse, complement } from 'ramda';
 import { moveBy } from '../utils/graph.js';
 import { back, word, end } from '../utils/motions.js';
-import { pointInRect } from '../utils/relation.js';
+import { findFromPoint } from '../utils/relation.js';
 import { bindAll } from '../utils/object.js';
 import { safe } from '../utils/function.js';
 import { nodes, cursor, thunks, selection } from '../stores.js';
@@ -15,9 +15,7 @@ const { remove } = bindAll(nodes);
 
 const notNil = complement(isNil);
 
-const findUnderPoint = (pos, xs) => xs.find(pointInRect(pos));
-
-const nodeUnderCursor = () => findUnderPoint(cursor.get(), nodes.get());
+const nodeUnderCursor = () => findFromPoint(cursor.get(), nodes.get());
 
 const motion = thunkify(fn => cursor.set(fn(cursor.get(), nodes.get())));
 
