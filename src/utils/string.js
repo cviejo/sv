@@ -8,11 +8,6 @@ const notIncluded = complement(included);
 
 const append = curry((a, b) => `${b}${a}`);
 
-const log = curry((label, x) => {
-	console.log(label, x);
-	return x;
-});
-
 // code taken from: https://github.com/philc/vimium
 const hintStrings = (chars, count) => {
 	const xs = [''];
@@ -30,4 +25,4 @@ const hintStrings = (chars, count) => {
 		.map(reverse);
 };
 
-export { notIncluded, remove, log, append, hintStrings };
+export { notIncluded, remove, append, hintStrings };

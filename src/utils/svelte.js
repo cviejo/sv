@@ -1,6 +1,4 @@
-import { tick, createEventDispatcher } from 'svelte';
-
-const t = x => tick().then(() => x);
+import { createEventDispatcher } from 'svelte';
 
 const eventDispatcher = name => {
 	const dispatch = createEventDispatcher();
@@ -8,4 +6,4 @@ const eventDispatcher = name => {
 	return x => dispatch(name, x);
 };
 
-export { t as tick, eventDispatcher };
+export { eventDispatcher };

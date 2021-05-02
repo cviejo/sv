@@ -21,4 +21,9 @@ const setSize = useWith(assign, [I, style]);
 
 const resetSize = setSize({ width: '', height: '' });
 
-export { byId, assign, getSize, setSize, resetSize, withId, load };
+const log = curry((label, x) => {
+	console.log(label, x);
+	return x;
+});
+
+export { byId, assign, getSize, setSize, resetSize, withId, load, log };
