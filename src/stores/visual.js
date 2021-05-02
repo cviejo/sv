@@ -1,10 +1,8 @@
 import { writable, derived } from 'svelte/store';
-import * as R from 'ramda';
+import { test, max, compose, min, when, __, repeat, update } from 'ramda';
 import mode from './mode.js';
 import cursor from './cursor.js';
 import { sizes } from '../config.js';
-
-const { test, max, compose, min, when, __ } = R;
 
 const fromTo = writable([
 	{ x: 0, y: 0 },
@@ -13,9 +11,9 @@ const fromTo = writable([
 
 const visualMode = test(/^visual/);
 
-const visualStart = compose(fromTo.set, R.repeat(__, 2), cursor.get);
+const visualStart = compose(fromTo.set, repeat(__, 2), cursor.get);
 
-const visualMove = compose(fromTo.update, R.update(1));
+const visualMove = compose(fromTo.update, update(1));
 
 const visual = derived([mode, fromTo], ([$mode, [from, to]]) => {
 	if (!visualMode($mode)) {

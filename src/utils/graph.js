@@ -2,6 +2,7 @@ import { concat, prop, clamp, pipe, add, pick, mergeWith, useWith } from 'ramda'
 import { sizes } from '../config.js';
 import specs from '../specs.js';
 import { remove } from './string.js';
+import { load } from './impure.js';
 import { I } from './combinators.js';
 
 const addHeader = x => `
@@ -34,8 +35,6 @@ const addHeader = x => `
 const cleanCode = pipe(remove(/\n\n.*add_css.*\n?/), remove(/.*___SVELTE_HMR_HOT_API.*/));
 
 const dataUri = pipe(btoa, concat('data:text/javascript;base64,'));
-
-const load = x => import(x);
 
 const limit = clamp(0, sizes.grid - sizes.step);
 
