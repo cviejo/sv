@@ -1,4 +1,4 @@
-import { useWith, split, pick, propOr, curry, path, pipe, last } from 'ramda';
+import { useWith, split, pick, propOr, curry, path, pipe, last, isNil } from 'ramda';
 import { map, valuesIn, mergeRight, toPairsIn, is, bind, complement, whereEq } from 'ramda';
 import { S, I } from './combinators.js';
 
@@ -6,6 +6,8 @@ const bindAll = obj =>
 	toPairsIn(obj)
 		.filter(pipe(last, is(Function)))
 		.reduce((acc, [key, value]) => ({ ...acc, [key]: bind(value, obj) }), {});
+
+const notNil = complement(isNil);
 
 const dotPath = useWith(path, [split('.'), I]);
 
@@ -23,5 +25,5 @@ const renameKeys = curry((keys, obj) =>
 
 const pickRename = curry((keys, obj) => pick(valuesIn(keys), renameKeys(keys, obj)));
 
-export { whereNotEq };
+export { whereNotEq, notNil };
 export { dotPath as path, toPairsIn, bindAll, renameKeys, pickRename, mergeResult, pickWith };

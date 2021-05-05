@@ -1,4 +1,4 @@
-import { curry, pipe, __, tap } from 'ramda';
+import { curry, pipe, __, prop, tap, nth, indexOf } from 'ramda';
 import writable from './writable.js';
 import { safe } from '../utils/function.js';
 import { findByProp } from '../utils/list.js';
@@ -13,6 +13,10 @@ const findById = findByProp('id', __, targets);
 
 const set = pipe(findById, safe(pipe(focusNode, store.set)));
 
+const nextIndex = x => (x + 1) % targets.length;
+
+const next = pipe(get, indexOf(__, targets), nextIndex, nth(__, targets), prop('id'), set);
+
 const register = curry((node, id) => {
 	['addEventListener', 'on']
 		.filter(x => node[x])
@@ -21,4 +25,4 @@ const register = curry((node, id) => {
 	targets.push({ node, id });
 });
 
-export default { subscribe, get, set, register };
+export default { subscribe, get, set, next, register };

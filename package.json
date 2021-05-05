@@ -6,26 +6,26 @@
 		"test": "node --experimental-vm-modules node_modules/.bin/jest"
 	},
 	"devDependencies": {
-		"@snowpack/plugin-svelte": "^3.4.0",
-		"@types/ramda": "^0.27.38",
+		"@snowpack/plugin-svelte": "^3.6.1",
+		"@types/ramda": "^0.27.40",
 		"babel-eslint": "^10.1.0",
-		"eslint": "^7.15.0",
-		"eslint-plugin-svelte3": "^3.0.0",
+		"eslint": "^7.25.0",
+		"eslint-plugin-svelte3": "^3.2.0",
 		"jest": "^26.6.3",
-		"prettier-plugin-svelte": "^1.4.2",
-		"snowpack": "^2.18.4",
-		"svelte": "^3.31.0"
+		"prettier-plugin-svelte": "^2.2.0",
+		"snowpack": "^3.3.7",
+		"svelte": "^3.38.2"
 	},
 	"dependencies": {
-		"codemirror": "^5.59.2",
+		"codemirror": "^5.61.0",
 		"flyd": "^0.2.8",
 		"nexusui": "^2.1.6",
-		"panzoom": "^9.4.1",
+		"panzoom": "^9.4.2",
 		"prettier": "^2.2.1",
 		"ramda": "^0.27.1",
-		"split.js": "^1.6.2",
-		"svelte-reduxify": "^1.3.0",
-		"svelte-select": "^3.16.0",
+		"split.js": "^1.6.4",
+		"svelte-reduxify": "^1.3.1",
+		"svelte-select": "^3.17.0",
 		"uuid": "^8.3.2"
 	}
 }

@@ -1,9 +1,9 @@
-import { invoker } from 'ramda';
+import { invoker, tap } from 'ramda';
 import { pickRename } from './object';
 
-const stopPropagation = invoker(0, 'stopPropagation');
+const stopPropagation = tap(invoker(0, 'stopPropagation'));
 
-const preventDefault = invoker(0, 'preventDefault');
+const preventDefault = tap(invoker(0, 'preventDefault'));
 
 const offsetRect = pickRename({
 	offsetTop: 'y',
