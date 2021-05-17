@@ -1,36 +1,45 @@
 <script>
 	import { onMount, setContext } from 'svelte';
-	import { pipe } from 'ramda';
 	import Split from 'split.js';
 	import Canvas from './components/Canvas.svelte';
-	/* import Select from './components/Select.svelte'; */
 	import Editor from './components/editor/Editor.svelte';
-	import KeyHandler from './components/KeyHandler.svelte';
-	import { path } from './utils/object.js';
+	import Modes from './components/Modes.svelte';
 	import { nothing } from './utils/function.js';
-	import { withId } from './utils/impure.js';
-	import { /* mode, */ cursor, nodes, thunks } from './stores.js';
 
 	import './dummy.js';
 
 	let edit = nothing;
 
-	const nodeProps = spec => withId({ ...$cursor, spec });
-
-	const { setMode } = thunks;
-
-	const onSpec = pipe(path('detail.value'), nodeProps, x => nodes.add(x), setMode('normal'));
-
 	setContext('edit', (...args) => edit(...args));
 
-	onMount(() => Split(['.left', '.right'], { sizes: [65, 35] }));
+	onMount(() => {
+		Split(['.left', '.right'], { sizes: [65, 35], direction: 'horizontal' });
+		Split(['.top', '.bottom'], { sizes: [65, 35], direction: 'vertical' });
+	});
 </script>
 
+<div class="left">
+	<Canvas />
+</div>
+<div class="right">
+	<div class="top">
+		<Editor bind:edit />
+	</div>
+	<div class="bottom">
+		<Editor />
+	</div>
+</div>
+
+<Modes />
+
 <style>
-	.split {
+	div {
 		box-sizing: border-box;
 		overflow-y: auto;
 		overflow-x: hidden;
+	}
+	.left,
+	.right {
 		height: 100%;
 		float: left;
 	}
@@ -45,28 +54,17 @@
 
 	:global(.gutter) {
 		background-color: var(--background-light);
-		float: left;
-		cursor: col-resize;
-		height: 100%;
+		cursor: row-resize;
 		opacity: 0.5;
 	}
 
 	:global(.gutter:hover) {
 		opacity: 1;
 	}
+
+	:global(.gutter.gutter-horizontal) {
+		float: left;
+		height: 100%;
+		cursor: col-resize;
+	}
 </style>
-
-<div class="left split">
-	<Canvas />
-</div>
-<div class="right split">
-	<Editor bind:edit />
-</div>
-
-<KeyHandler />
-
-<!--
-{#if $mode === 'insert'}
-	<Select on:select={onSpec} />
-{/if}
--->

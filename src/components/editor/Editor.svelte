@@ -28,6 +28,16 @@
 	$: defineEx('swrite', 'sw', nothing);
 </script>
 
+<div>
+	<textarea use:init />
+</div>
+
+<!--
+	// TODO scroll after format, example:
+	/* const { left, top } = editor.getScrollInfo(); 
+	 editor.setValue((value = new_value)); 
+	 editor.scrollTo(left, top); */
+-->
 <style>
 	div {
 		background-color: var(--background-dark);
@@ -46,12 +56,3 @@
 		border-top: 2px solid;
 	}
 </style>
-
-<div><textarea use:init /></div>
-
-<!--
-	// TODO scroll after format, example:
-	/* const { left, top } = editor.getScrollInfo(); 
-	 editor.setValue((value = new_value)); 
-	 editor.scrollTo(left, top); */
--->
