@@ -7,8 +7,14 @@
 	export let selected;
 
 	// tick to have all ios positioned before reading the rects
-	const position = (elem, item) => tick().then(() => assign(item, offsetRect(elem)));
+	const position = (elem, item) => tick().then(() => assign(offsetRect(elem), item));
 </script>
+
+<div class="io-bar" class:selected>
+	{#each items as io (io)}
+		<div class="io" use:position={io} />
+	{/each}
+</div>
 
 <style>
 	.io-bar {
@@ -27,9 +33,3 @@
 		width: 10px;
 	}
 </style>
-
-<div class="io-bar" class:selected>
-	{#each items as io (io)}
-		<div class="io" use:position={io} />
-	{/each}
-</div>

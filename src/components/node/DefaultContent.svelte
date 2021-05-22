@@ -2,6 +2,10 @@
 	export let spec = '';
 </script>
 
+<div>
+	<p>{spec}</p>
+</div>
+
 <style>
 	div {
 		background-color: rgb(170, 170, 170);
@@ -16,7 +20,3 @@
 		padding-right: 5px;
 	}
 </style>
-
-<div>
-	<p>{spec}</p>
-</div>

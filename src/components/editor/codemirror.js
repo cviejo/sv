@@ -31,7 +31,7 @@ const options = {
 	theme: 'vs',
 };
 
-const fromTextArea = (elem) => codemirror.fromTextArea(elem, options);
+const fromTextArea = elem => codemirror.fromTextArea(elem, options);
 
 const setSize = curry((width, height, editor) => (editor.setSize(width, height), editor));
 

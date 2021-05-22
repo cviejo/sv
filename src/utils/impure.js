@@ -11,7 +11,7 @@ const withId = x => ({ id: uuid(), ...x });
 
 const element = pipe(prop('id'), byId);
 
-const assign = curry((a, b) => Object.assign(a, b));
+const assign = curry((a, b) => Object.assign(b, a));
 
 const style = pipe(element, prop('style'));
 
@@ -19,7 +19,7 @@ const getSize = pipe(element, pickRename({ offsetWidth: 'width', offsetHeight: '
 
 const setSize = useWith(assign, [I, style]);
 
-const resetSize = setSize({ width: '', height: '' });
+const resetSize = assign({ width: '', height: '' });
 
 const log = curry((label, x) => {
 	console.log(label, x);

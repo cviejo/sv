@@ -50,14 +50,6 @@
 	run(node);
 </script>
 
-<style>
-	.node {
-		overflow: hidden;
-		position: absolute;
-		border-radius: 2px;
-	}
-</style>
-
 <div class="node" style="top: {$node.y - 4}px; left: {$node.x}px; ">
 	<MouseHandler>
 		<IO {selected} items={$node.inlets} />
@@ -67,3 +59,11 @@
 		<IO {selected} items={$node.outlets} />
 	</MouseHandler>
 </div>
+
+<style>
+	.node {
+		overflow: hidden;
+		position: absolute;
+		border-radius: 2px;
+	}
+</style>
