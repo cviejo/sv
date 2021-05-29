@@ -1,39 +1,56 @@
-.cm-s-vs.CodeMirror {
+.cm-s-vs.CodeMirror,
+.cm-s-vs.CodeMirror ::-webkit-scrollbar,
+.vs.CodeMirror-hints,
+.vs.CodeMirror-hints ::-webkit-scrollbar {
 	background: rgb(30, 30, 30);
 	color: rgb(220, 220, 220);
+	scrollbar-color: rgb(220, 220, 220, 0.4) transparent;
 }
 
-.cm-animate-fat-cursor{
-	background-color: rgba(220, 220, 220, 0.4);
+.cm-s-vs.CodeMirror ::-webkit-scrollbar,
+.vs.CodeMirror-hints ::-webkit-scrollbar {
+	width: 10px;
+}
+
+.cm-animate-fat-cursor,
+.cm-s-vs.CodeMirror ::-webkit-scrollbar-thumb,
+.vs.CodeMirror-hints ::-webkit-scrollbar-thumb {
+	background-color: rgb(220, 220, 220, 0.4);
 }
 
 .cm-s-vs div.CodeMirror-selected {
 	background: rgb(38, 79, 120);
-	/* background: #434c5e; */
 }
+
 .cm-s-vs .CodeMirror-line::selection,
 .cm-s-vs .CodeMirror-line > span::selection,
 .cm-s-vs .CodeMirror-line > span > span::selection {
 	background: #3b4252;
 }
+
 .cm-s-vs .CodeMirror-line::-moz-selection,
 .cm-s-vs .CodeMirror-line > span::-moz-selection,
 .cm-s-vs .CodeMirror-line > span > span::-moz-selection {
 	background: #3b4252;
 }
+
 .cm-s-vs .CodeMirror-gutters {
 	background: rgb(30, 30, 30);
 	border-right: 0px;
 }
+
 .cm-s-vs .CodeMirror-guttermarker {
 	color: rgb(95, 139, 78);
 }
+
 .cm-s-vs .CodeMirror-guttermarker-subtle {
 	color: rgb(95, 139, 78);
 }
+
 .cm-s-vs .CodeMirror-linenumber {
 	color: rgb(95, 139, 78);
 }
+
 .cm-s-vs .CodeMirror-cursor {
 	border-left: 1px solid #f8f8f0;
 	background: rgba(220, 220, 220, 0.6);
@@ -45,6 +62,7 @@
 .cm-s-vs span.cm-atom {
 	color: rgb(181, 205, 168);
 }
+
 .cm-s-vs span.cm-number {
 	color: rgb(181, 205, 168);
 }
@@ -52,12 +70,15 @@
 .cm-s-vs span.cm-comment.cm-attribute {
 	color: #97b757;
 }
+
 .cm-s-vs span.cm-comment.cm-def {
 	color: #bc9262;
 }
+
 .cm-s-vs span.cm-comment.cm-tag {
 	color: #bc6283;
 }
+
 .cm-s-vs span.cm-comment.cm-type {
 	color: #5998a6;
 }
@@ -66,40 +87,52 @@
 .cm-s-vs span.cm-attribute {
 	color: rgb(220, 220, 220);
 }
+
 .cm-s-vs span.cm-keyword {
 	color: rgb(102, 155, 209);
 }
+
 .cm-s-vs span.cm-builtin {
 	color: rgb(102, 155, 209);
 }
+
 .cm-s-vs span.cm-string {
 	color: rgb(197, 148, 124);
 }
+
 .cm-s-vs span.cm-variable {
 	color: rgb(70, 201, 176);
 }
+
 .cm-s-vs span.cm-variable-2 {
 	color: rgb(70, 201, 176);
 }
+
 .cm-s-vs span.cm-variable-3,
 .cm-s-vs span.cm-type {
 	color: rgb(70, 201, 176);
 }
+
 .cm-s-vs span.cm-def {
 	color: rgb(220, 220, 220);
 }
+
 .cm-s-vs span.cm-bracket {
 	color: rgb(102, 155, 209);
 }
+
 .cm-s-vs span.cm-tag {
 	color: #bf616a;
 }
+
 .cm-s-vs span.cm-header {
 	color: rgb(181, 205, 168);
 }
+
 .cm-s-vs span.cm-link {
 	color: rgb(181, 205, 168);
 }
+
 .cm-s-vs span.cm-error {
 	background: #bf616a;
 	color: #f8f8f0;
@@ -108,7 +141,20 @@
 .cm-s-vs .CodeMirror-activeline-background {
 	background: #3b4252;
 }
+
 .cm-s-vs .CodeMirror-matchingbracket {
 	text-decoration: underline;
 	color: white !important;
+}
+
+.vs.CodeMirror-hints {
+	-moz-box-shadow: 2px 3px 5px rgba(30, 30, 30, 0.2);
+	-webkit-box-shadow: 2px 3px 5px rgba(30, 30, 30, 0.2);
+	box-shadow: 2px 3px 5px rgba(30, 30, 30, 0.2);
+	background: rgb(30, 30, 30);
+	border: 1px solid grey;
+}
+
+.vs .CodeMirror-hint {
+	color: rgb(220, 220, 220);
 }

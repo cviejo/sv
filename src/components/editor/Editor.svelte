@@ -1,43 +1,25 @@
 <script>
-	import { pipe, __, tap } from 'ramda';
-	import { focus } from '../../stores.js';
-	import { format } from '../../utils/prettier.js';
-	import { bindAll } from '../../utils/object.js';
+	import { __ } from 'ramda';
+	import codemirror from './codemirror.js';
+	import { dispatchEvent } from '../../utils/impure.js';
 	import { nothing } from '../../utils/function.js';
-	import { codemirror, fromTextArea, setSize, defineEx } from './codemirror.js';
+	import { focus } from '../../stores.js';
 
-	let editor = codemirror();
+	let textarea = null;
 	let callback = nothing;
 
 	export function edit(code, cb = nothing) {
 		callback = cb;
-		setValue(format(code));
+		dispatchEvent(textarea, 'value', code);
 	}
 
-	const setEditor = tap(x => (editor = x));
-
-	const focusable = focus.register(__, 'editor');
-
-	const init = pipe(fromTextArea, setSize('100%', '100%'), setEditor, focusable);
-
-	$: ({ setValue, getValue } = bindAll(editor));
-
-	$: onChange = pipe(nothing, getValue, format, tap(setValue), callback);
-
-	$: defineEx('write', 'w', onChange);
-	$: defineEx('swrite', 'sw', nothing);
+	let onon = focus.register(__, 'editor');
 </script>
 
 <div>
-	<textarea use:init />
+	<textarea use:codemirror={onon} bind:this={textarea} on:write={x => callback(x.detail)} />
 </div>
 
-<!--
-	// TODO scroll after format, example:
-	/* const { left, top } = editor.getScrollInfo(); 
-	 editor.setValue((value = new_value)); 
-	 editor.scrollTo(left, top); */
--->
 <style>
 	div {
 		background-color: var(--background-dark);
