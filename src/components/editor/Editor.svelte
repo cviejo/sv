@@ -1,5 +1,5 @@
 <script>
-	import { __ } from 'ramda';
+	import { pipe, prop, __ } from 'ramda';
 	import codemirror from './codemirror.js';
 	import { dispatchEvent } from '../../utils/impure.js';
 	import { nothing } from '../../utils/function.js';
@@ -13,11 +13,11 @@
 		dispatchEvent(textarea, 'value', code);
 	}
 
-	let onon = focus.register(__, 'editor');
+	$: onWrite = pipe(prop('detail'), callback);
 </script>
 
 <div>
-	<textarea use:codemirror={onon} bind:this={textarea} on:write={x => callback(x.detail)} />
+	<textarea use:codemirror={focus.register('editor')} bind:this={textarea} on:write={onWrite} />
 </div>
 
 <style>

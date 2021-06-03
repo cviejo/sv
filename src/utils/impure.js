@@ -21,9 +21,13 @@ const setSize = useWith(assign, [I, style]);
 
 const resetSize = assign({ width: '', height: '' });
 
+const dispatchEvent = curry((node, type, detail) =>
+	node.dispatchEvent(new CustomEvent(type, { detail }))
+);
+
 const log = curry((label, x) => {
 	console.log(label, x);
 	return x;
 });
 
-export { byId, assign, getSize, setSize, resetSize, withId, load, log };
+export { byId, assign, getSize, setSize, resetSize, dispatchEvent, withId, load, log };

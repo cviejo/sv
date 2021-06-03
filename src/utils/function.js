@@ -1,6 +1,8 @@
-import { curry, pipeWith, andThen, unless, isNil } from 'ramda';
+import { curry, pipeWith, nAry, andThen, unless, isNil } from 'ramda';
 
 const nothing = () => {};
+
+const nullary = nAry(0);
 
 const safe = unless(isNil);
 
@@ -14,4 +16,4 @@ const forEachAsync = curry((fn, xs) =>
 	xs.reduce((acc, x) => acc.then(() => fn(x)), Promise.resolve())
 );
 
-export { pipeP, composeP, nothing, forEachAsync, safe };
+export { pipeP, composeP, nothing, nullary, forEachAsync, safe };

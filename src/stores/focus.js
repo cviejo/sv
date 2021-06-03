@@ -17,7 +17,7 @@ const nextIndex = x => (x + 1) % targets.length;
 
 const next = pipe(get, indexOf(__, targets), nextIndex, nth(__, targets), prop('id'), set);
 
-const register = curry((node, id) => {
+const register = curry((id, node) => {
 	['addEventListener', 'on']
 		.filter(x => node[x])
 		.forEach(x => node[x]('mousedown', () => set(id)));

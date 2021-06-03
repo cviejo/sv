@@ -1,7 +1,5 @@
 .cm-s-vs.CodeMirror,
-.cm-s-vs.CodeMirror ::-webkit-scrollbar,
-.vs.CodeMirror-hints,
-.vs.CodeMirror-hints ::-webkit-scrollbar {
+.vs.CodeMirror-hints {
 	background: rgb(30, 30, 30);
 	color: rgb(220, 220, 220);
 	scrollbar-color: rgb(220, 220, 220, 0.4) transparent;
@@ -9,6 +7,7 @@
 
 .cm-s-vs.CodeMirror ::-webkit-scrollbar,
 .vs.CodeMirror-hints ::-webkit-scrollbar {
+	background: transparent;
 	width: 10px;
 }
 
@@ -148,13 +147,23 @@
 }
 
 .vs.CodeMirror-hints {
-	-moz-box-shadow: 2px 3px 5px rgba(30, 30, 30, 0.2);
-	-webkit-box-shadow: 2px 3px 5px rgba(30, 30, 30, 0.2);
-	box-shadow: 2px 3px 5px rgba(30, 30, 30, 0.2);
-	background: rgb(30, 30, 30);
-	border: 1px solid grey;
+	-moz-box-shadow: 2px 3px 5px rgba(40, 40, 40);
+	-webkit-box-shadow: 2px 3px 5px rgba(40, 40, 40);
+	box-shadow: 2px 3px 5px rgba(40, 40, 40);
+	background: rgb(41, 45, 46);
+	border: 1px solid rgb(69, 69, 69);
+	border-radius: 2px;
+	padding: 0px;
+	overflow: overlay;
 }
 
 .vs .CodeMirror-hint {
+	margin: 0px;
+	padding: 0px 5px;
 	color: rgb(220, 220, 220);
+	border-radius: 0px;
+}
+
+.vs li.CodeMirror-hint-active {
+	background: rgb(0, 47, 76);
 }

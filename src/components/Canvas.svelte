@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { flip } from 'ramda';
 	import { mode, nodes, focus, edges } from '../stores.js';
 	import panzoom from '../utils/panzoom.js';
 	import { sizes, svg } from '../config.js';
@@ -10,6 +11,8 @@
 	import To from './To.svelte';
 	import Edge from './Edge.svelte';
 	import Visual from './Visual.svelte';
+
+	const focusable = flip(focus.register);
 
 	const modals = {
 		visual: Visual,
@@ -22,6 +25,22 @@
 
 	onMount(() => focus.set('graph'));
 </script>
+
+<div class="wrapper" use:focusable={'graph'}>
+	<div class="board" style="--grid-size({sizes.grid}px)" use:panzoom>
+		<Grid />
+		<svg {...svg}>
+			{#each $edges as edge (edge.id)}
+				<Edge {edge} />
+			{/each}
+		</svg>
+		{#each $nodes as { id } (id)}
+			<Node {id} />
+		{/each}
+		<Cursor />
+		<svelte:component this={modal} />
+	</div>
+</div>
 
 <style>
 	.board {
@@ -38,19 +57,3 @@
 		overflow: hidden;
 	}
 </style>
-
-<div class="wrapper" use:focus.register={'graph'}>
-	<div class="board" style="--grid-size({sizes.grid}px)" use:panzoom>
-		<Grid />
-		<svg {...svg}>
-			{#each $edges as edge (edge.id)}
-				<Edge {edge} />
-			{/each}
-		</svg>
-		{#each $nodes as { id } (id)}
-			<Node {id} />
-		{/each}
-		<Cursor />
-		<svelte:component this={modal} />
-	</div>
-</div>

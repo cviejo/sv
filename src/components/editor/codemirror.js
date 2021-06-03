@@ -32,7 +32,6 @@ const options = {
 	indentWithTabs: true,
 	keyMap: 'vim',
 	lineWrapping: true,
-	// scrollbarStyle: 'overlay',
 	mode: {
 		json: true,
 		name: 'javascript',
