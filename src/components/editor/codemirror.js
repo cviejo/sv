@@ -3,7 +3,7 @@ import codemirror from 'codemirror';
 import { format } from '../../utils/prettier.js';
 import { bindAll } from '../../utils/object.js';
 import { nothing, nullary } from '../../utils/function.js';
-import { dispatchEvent } from '../../utils/impure.js';
+import { dispatchEvent } from '../../utils/effects.js';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/comment/comment.js';
@@ -28,9 +28,9 @@ let instances = [];
 
 const options = {
 	autoCloseBrackets: '()[]{}\'\'""``',
+	keyMap: 'vim',
 	indentUnit: 3,
 	indentWithTabs: true,
-	keyMap: 'vim',
 	lineWrapping: true,
 	mode: {
 		json: true,

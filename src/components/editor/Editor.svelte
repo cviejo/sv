@@ -1,7 +1,7 @@
 <script>
 	import { pipe, prop, __ } from 'ramda';
 	import codemirror from './codemirror.js';
-	import { dispatchEvent } from '../../utils/impure.js';
+	import { dispatchEvent } from '../../utils/effects.js';
 	import { nothing } from '../../utils/function.js';
 	import { focus } from '../../stores.js';
 
@@ -23,8 +23,7 @@
 <style>
 	div {
 		background-color: var(--background-dark);
-		padding: 10px;
-		padding-bottom: 0px;
+		padding: 5px;
 		width: 100%;
 		height: 100%;
 		box-sizing: border-box;
