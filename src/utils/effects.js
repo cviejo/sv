@@ -1,9 +1,13 @@
-import { pipe, prop, curry, useWith } from 'ramda';
+import { invoker, tap, pipe, prop, curry, useWith } from 'ramda';
 import { v4 as uuid } from 'uuid';
 import { pickRename } from './object';
 import { I } from './combinators';
 
 const byId = x => document.getElementById(x);
+
+const stopPropagation = tap(invoker(0, 'stopPropagation'));
+
+const preventDefault = tap(invoker(0, 'preventDefault'));
 
 const load = x => import(x);
 
@@ -30,4 +34,5 @@ const log = curry((label, x) => {
 	return x;
 });
 
+export { stopPropagation, preventDefault };
 export { byId, assign, getSize, setSize, resetSize, dispatchEvent, withId, load, log };
