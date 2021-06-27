@@ -7,6 +7,8 @@ const derivedRect = rect => ({
 	bottom: rect.y + rect.height,
 });
 
+const center = ({ x, y, width, height }) => ({ x: x + width / 2, y: y + height / 2 });
+
 const distance = curry((a, b) => Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2)));
 
 const fill = curry((step, x) => x + step - ((x - 1) % step) - 1);
@@ -30,4 +32,4 @@ const intersect = useWith(
 	[derivedRect, derivedRect]
 );
 
-export { idEq, fill, distance, notEquals, pointInRect, findFromPoint, intersect };
+export { idEq, fill, center, distance, notEquals, pointInRect, findFromPoint, intersect };

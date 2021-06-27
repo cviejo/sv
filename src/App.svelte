@@ -13,8 +13,7 @@
 	setContext('edit', (...args) => edit(...args));
 
 	onMount(() => {
-		Split(['.left', '.right'], { sizes: [65, 35], direction: 'horizontal' });
-		Split(['.top', '.bottom'], { sizes: [65, 35], direction: 'vertical' });
+		Split(['.left', '.right'], { sizes: [50, 50], direction: 'horizontal', minSize: 10 });
 	});
 </script>
 
@@ -22,12 +21,7 @@
 	<Canvas />
 </div>
 <div class="right">
-	<div class="top">
-		<Editor bind:edit />
-	</div>
-	<div class="bottom">
-		<Editor />
-	</div>
+	<Editor bind:edit />
 </div>
 
 <Modes />
@@ -50,6 +44,7 @@
 		--background-medium: rgb(37, 37, 38);
 		--background-light: rgb(51, 51, 51);
 		--io-color: rgb(143, 143, 143);
+		--white: rgb(220, 220, 220);
 	}
 
 	:global(.gutter) {

@@ -25,5 +25,12 @@ const renameKeys = curry((keys, obj) =>
 
 const pickRename = curry((keys, obj) => pick(valuesIn(keys), renameKeys(keys, obj)));
 
-export { whereNotEq, notNil };
+const offsetRect = pickRename({
+	offsetTop: 'y',
+	offsetLeft: 'x',
+	offsetWidth: 'width',
+	offsetHeight: 'height',
+});
+
+export { whereNotEq, notNil, offsetRect };
 export { dotPath as path, toPairsIn, bindAll, renameKeys, pickRename, mergeResult, pickWith };
