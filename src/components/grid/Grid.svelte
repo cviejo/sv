@@ -5,14 +5,7 @@
 	const { step, region, grid } = sizes;
 </script>
 
-<style>
-	svg {
-		background-color: var(--background-medium);
-		position: absolute;
-		z-index: -1;
-	}
-</style>
-
+<!-- svelte-ignore component-name-lowercase -->
 <svg {...svg}>
 	<defs>
 		<Square id="inner-square" {step} strokeWidth="0.2" />
@@ -24,3 +17,11 @@
 		<rect width={grid + 1} height={grid + 1} fill="url(#outer-square)" />
 	</g>
 </svg>
+
+<style>
+	svg {
+		background-color: var(--background-medium);
+		position: absolute;
+		z-index: -1;
+	}
+</style>

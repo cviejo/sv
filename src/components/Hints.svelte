@@ -32,6 +32,12 @@
 	$: hints = hintStrings(chars, items.length).map((hint, i) => ({ ...items[i], hint }));
 </script>
 
+{#each hints as x (x.hint)}
+	<span style=" top: {x.y}px; left: {x.x}px;">{x.hint}</span>
+{/each}
+
+<svelte:window on:keydown|capture={pipe(prop('key'), keydown)} />
+
 <style>
 	span {
 		color: white;
@@ -41,9 +47,3 @@
 		padding: 0px 3px;
 	}
 </style>
-
-<div />
-
-{#each hints as x (x.hint)}<span style=" top: {x.y}px; left: {x.x}px;">{x.hint}</span>{/each}
-
-<svelte:window on:keydown|capture={pipe(prop('key'), keydown)} />

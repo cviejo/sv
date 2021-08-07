@@ -32,4 +32,14 @@ const intersect = useWith(
 	[derivedRect, derivedRect]
 );
 
-export { idEq, fill, center, distance, notEquals, pointInRect, findFromPoint, intersect };
+export {
+	idEq,
+	fill,
+	center,
+	derivedRect,
+	distance,
+	notEquals,
+	pointInRect,
+	findFromPoint,
+	intersect,
+};

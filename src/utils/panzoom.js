@@ -1,23 +1,21 @@
 import panzoom from 'panzoom';
-import { ifElse, divide, __, multiply, pipe, equals } from 'ramda';
+import { ifElse, divide, flip, multiply, pipe, equals, useWith, map } from 'ramda';
 import { mode, cursor } from '../stores.js';
 import { sizes } from '../config.js';
-import { bindAll } from './object.js';
+import { bindAll, offsetRect } from './object.js';
+import { derivedRect } from './relation.js';
+
+const { step } = sizes;
 
 const zoomable = pipe(panzoom, bindAll);
 
-const viewport = (width, height, transform) => {
-	const scale = divide(__, transform.scale);
+const divideBy = flip(divide);
 
-	const top = scale(-transform.y);
-	const left = scale(-transform.x);
-	const right = scale(width) + left;
-	const bottom = scale(height) + top;
+const scale = useWith(map, [divideBy]);
 
-	return { top, left, right, bottom };
-};
+const scaledViewport = pipe(scale, derivedRect);
 
-const offset = (cursor, step, viewport) => {
+const offset = (cursor, viewport) => {
 	const { x, y } = cursor;
 
 	if (x + step > viewport.right) {
@@ -37,25 +35,21 @@ const offset = (cursor, step, viewport) => {
 
 export default board => {
 	const container = board.parentElement;
-	const { pause, resume, getTransform, moveBy } = zoomable(board, {
-		maxZoom: 3.2,
-		minZoom: 0.3,
-		beforeWheel: e => !e.ctrlKey,
-	});
+	const defaults = { maxZoom: 3.2, minZoom: 0.3, beforeWheel: e => !e.ctrlKey };
+	const { pause, resume, getTransform, moveBy } = zoomable(board, defaults);
 
 	mode.subscribe(ifElse(equals('insert'), pause, resume));
 
-	cursor.subscribe(x => {
-		const width = container.offsetWidth;
-		const height = container.offsetHeight;
+	cursor.subscribe($cursor => {
+		const { x, y, scale } = getTransform();
+		const { width, height } = offsetRect(container);
 
-		const transform = getTransform();
-		const move = offset(x, sizes.step, viewport(width, height, transform));
+		const viewport = scaledViewport(scale, { x: -x, y: -y, width, height });
 
-		moveBy(...move.map(multiply(transform.scale)));
+		const move = offset($cursor, viewport);
+
+		moveBy(...move.map(multiply(scale)));
 	});
-
-	cursor.set({ x: 0, y: 0 });
 
 	moveBy(sizes.step, sizes.step);
 };

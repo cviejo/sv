@@ -3,7 +3,7 @@
 	import { pipe } from 'ramda';
 	import { writable } from 'svelte/store';
 	import { nodes } from '../stores.js';
-	import { center } from '../utils/dom.js';
+	import { center } from '../utils/relation.js';
 	import { moveBy } from '../utils/graph.js';
 
 	export let edge;
@@ -39,6 +39,10 @@
 	});
 </script>
 
+{#if $path}
+	<path d={$path} />
+{/if}
+
 <style>
 	path {
 		stroke: var(--io-color);
@@ -46,7 +50,3 @@
 		fill: transparent;
 	}
 </style>
-
-{#if $path}
-	<path d={$path} />
-{/if}

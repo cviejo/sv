@@ -18,13 +18,19 @@
 
 	const keyboardEvent = key => new KeyboardEvent('keydown', { key, bubbles: true });
 
-	const triggerKeydown = thunkify(key => select.dispatchEvent(keyboardEvent(key)));
+	const dispatch = thunkify(key => select.dispatchEvent(keyboardEvent(key)));
 
 	const keydown = cond([
-		[whereEq({ key: 'n', ctrlKey: true }), triggerKeydown('ArrowDown')],
-		[whereEq({ key: 'p', ctrlKey: true }), triggerKeydown('ArrowUp')],
+		[whereEq({ key: 'n', ctrlKey: true }), dispatch('ArrowDown')],
+		[whereEq({ key: 'p', ctrlKey: true }), dispatch('ArrowUp')],
 	]);
 </script>
+
+<div class="cover" on:click={thunks.setMode('normal')}>
+	<div class="theme" bind:this={select} on:keydown|capture={keydown}>
+		<Select {...props} on:select />
+	</div>
+</div>
 
 <style>
 	.cover {
@@ -58,19 +64,10 @@
 		--itemIsActiveBG: rgb(120, 120, 120);
 		--listBackground: var(--background-dark);
 		--listBorderRadius: 0px;
-	}
-</style>
-
-<div class="cover" on:click={thunks.setMode('normal')}>
-	<div class="theme" bind:this={select} on:keydown|capture={keydown}>
-		<Select {...props} on:select />
-	</div>
-</div>
-
-<!-- 
 		/* --borderFocusColor: black; */
 		/* --borderHoverColor: black; */
 		/* --disabledPlaceholderColor: white; */
 		/* --placeholderColor: black; */
 		/* --placeholderColor: white; */
--->
+	}
+</style>

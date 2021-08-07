@@ -2,7 +2,7 @@ import { concat, prop, clamp, pipe, add, pick, mergeWith, useWith } from 'ramda'
 import { sizes } from '../config.js';
 import specs from '../specs.js';
 import { remove } from './string.js';
-import { load } from './impure.js';
+import { load } from './effects.js';
 import { I } from './combinators.js';
 
 const addHeader = x => `
@@ -40,9 +40,9 @@ const limit = clamp(0, sizes.grid - sizes.step);
 
 const pickPoint = pick(['x', 'y']);
 
-const mergeWithAdd = mergeWith(pipe(add, limit));
+const mergeAdding = mergeWith(pipe(add, limit));
 
-const moveBy = useWith(mergeWithAdd, [pickPoint, I]);
+const moveBy = useWith(mergeAdding, [pickPoint, I]);
 
 const specCode = pipe(specs.get, prop('code'), cleanCode, addHeader);
 

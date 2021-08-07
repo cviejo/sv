@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { flip } from 'ramda';
-	import { mode, nodes, focus, edges } from '../stores.js';
+	import { mode, nodes, focus, edges, cursor } from '../stores.js';
 	import panzoom from '../utils/panzoom.js';
 	import { sizes, svg } from '../config.js';
 	import Node from './node/Node.svelte';
@@ -23,12 +23,16 @@
 
 	$: modal = modals[$mode];
 
+	cursor.set({ x: 0, y: 0 });
+
 	onMount(() => focus.set('graph'));
 </script>
 
 <div class="wrapper" use:focusable={'graph'}>
 	<div class="board" style="--grid-size({sizes.grid}px)" use:panzoom>
 		<Grid />
+		<!-- TODO: ask about this linting warning -->
+		<!-- svelte-ignore component-name-lowercase -->
 		<svg {...svg}>
 			{#each $edges as edge (edge.id)}
 				<Edge {edge} />

@@ -3,7 +3,7 @@
 	import { cond, __, whereEq, pipe, juxt, both, test, propEq, prop } from 'ramda';
 	import { thunkify, isNil, ifElse } from 'ramda';
 	import Select from '../components/Select.svelte';
-	import { stopPropagation, preventDefault } from '../utils/dom.js';
+	import { stopPropagation, preventDefault } from '../utils/effects.js';
 	import { focus, thunks, nodes, visual, cursor, selection, mode } from '../stores.js';
 	import { safe, nothing, forEachAsync } from '../utils/function.js';
 	import { moveBy } from '../utils/graph.js';
