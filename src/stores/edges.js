@@ -1,6 +1,6 @@
 import { whereEq, when, append, reject, pipe, curry, path, ifElse, unary } from 'ramda';
 import { findEq } from '../utils/list.js';
-import { withId } from '../utils/impure.js';
+import { withId } from '../utils/effects.js';
 import nodes from './nodes';
 import writable from './writable.js';
 
