@@ -5,7 +5,7 @@
 	import Select from '../components/Select.svelte';
 	import { stopPropagation, preventDefault } from '../utils/effects.js';
 	import { focus, thunks, nodes, visual, cursor, selection, mode } from '../stores.js';
-	import { safe, nothing, forEachAsync } from '../utils/function.js';
+	import { safe, noop, forEachAsync } from '../utils/function.js';
 	import { moveBy } from '../utils/graph.js';
 	import { back, word, end } from '../utils/motions.js';
 	import { intersect, findFromPoint } from '../utils/relation.js';
@@ -93,9 +93,9 @@
 		[whereEq({ key: 'w', ctrlKey: true }), pipe(stopPropagation, focus.next)],
 		[whereEq({ key: 'K' }), pipe(stopPropagation, focus.next)],
 		[whereEq({ key: 'J' }), pipe(stopPropagation, focus.next)],
-		[focusEq('editor'), nothing],
+		[focusEq('editor'), noop],
 		[whereEq({ key: 'Escape' }), juxt([setSelection([]), setMode('normal')])],
-		[modeEq('insert'), nothing],
+		[modeEq('insert'), noop],
 		[whereEq({ key: 'p', ctrlKey: true }), setMode('select-menu')],
 		[whereEq({ key: 'f' }), setMode('connect')],
 		[whereEq({ key: 't' }), setMode('to')],

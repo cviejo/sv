@@ -2,7 +2,7 @@ import { pipe, prop, propEq, curry, tap, reject, propOr, find } from 'ramda';
 import codemirror from 'codemirror';
 import { format } from '../../utils/prettier.js';
 import { bindAll } from '../../utils/object.js';
-import { nothing, nullary } from '../../utils/function.js';
+import { noop, nullary } from '../../utils/function.js';
 import { dispatchEvent } from '../../utils/effects.js';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
@@ -40,7 +40,7 @@ const options = {
 };
 
 const onEx = curry((ex, editor, data) => {
-	const callback = pipe(find(propEq('editor', editor)), propOr(nothing, ex));
+	const callback = pipe(find(propEq('editor', editor)), propOr(noop, ex));
 	callback(instances)(data);
 });
 

@@ -2,7 +2,7 @@
 	import { evolve, replace, pipe, prop, cond, T } from 'ramda';
 	import { hintStrings, notIncluded } from '../utils/string.js';
 	import { findByProp } from '../utils/list.js';
-	import { nothing } from '../utils/function.js';
+	import { noop } from '../utils/function.js';
 	import { eventDispatcher } from '../utils/svelte.js';
 
 	export let items = [];
@@ -24,7 +24,7 @@
 	};
 
 	const keydown = cond([
-		[invalid, nothing],
+		[invalid, noop],
 		[match, pipe(match, dispatch)],
 		[T, filter],
 	]);

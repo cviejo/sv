@@ -4,11 +4,11 @@
 	import Canvas from './components/Canvas.svelte';
 	import Editor from './components/editor/Editor.svelte';
 	import Modes from './components/Modes.svelte';
-	import { nothing } from './utils/function.js';
+	import { noop } from './utils/function.js';
 
 	import './dummy.js';
 
-	let edit = nothing;
+	let edit = noop;
 
 	setContext('edit', (...args) => edit(...args));
 

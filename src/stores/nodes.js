@@ -1,5 +1,5 @@
 import { idEq, notEquals } from '../utils/relation.js';
-import { nothing } from '../utils/function.js';
+import { noop } from '../utils/function.js';
 import { whereNotEq } from '../utils/object.js';
 import edges from './edges.js';
 
@@ -19,7 +19,7 @@ const proxy = x => ({
 		this.listeners = this.listeners.filter(notEquals(fn));
 	},
 	changed() {
-		// can't do forEach(this.smth), this binding will change later
+		// can't do forEach(this.smth), `this` binding will change later
 		this.listeners.forEach(x => this.notify(x));
 	},
 	notify() {},
@@ -32,7 +32,7 @@ const node = x =>
 		inlets: [],
 		outlets: [],
 		updated: null,
-		update(fn = nothing) {
+		update(fn = noop) {
 			Object.assign(this, fn(this));
 			this.changed();
 			return this;

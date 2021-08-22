@@ -18,7 +18,7 @@ const stringify = (x) => JSON.stringify(x, null, 3);
 
 const pre = (style) => (x) => \`<pre style="\${style}">\${stringify(x)}</pre>\`;
 
-const w = "width: 175px";
+const w = "width: 165px";
 const h = "height: 50px";
 
 const display = pre(

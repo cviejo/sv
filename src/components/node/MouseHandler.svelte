@@ -1,7 +1,8 @@
 <script>
+	// TODO: this is better as an action
 	import { unless } from 'ramda';
 	import { mode } from '../../stores.js';
-	import { stopPropagation } from '../../utils/dom.js';
+	import { stopPropagation } from '../../utils/effects.js';
 
 	const normalMode = () => $mode !== 'normal';
 

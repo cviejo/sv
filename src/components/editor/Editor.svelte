@@ -2,13 +2,13 @@
 	import { pipe, prop, __ } from 'ramda';
 	import codemirror from './codemirror.js';
 	import { dispatchEvent } from '../../utils/effects.js';
-	import { nothing } from '../../utils/function.js';
+	import { noop } from '../../utils/function.js';
 	import { focus } from '../../stores.js';
 
 	let textarea = null;
-	let callback = nothing;
+	let callback = noop;
 
-	export function edit(code, cb = nothing) {
+	export function edit(code, cb = noop) {
 		callback = cb;
 		dispatchEvent(textarea, 'value', code);
 	}
@@ -28,10 +28,12 @@
 		height: 100%;
 		box-sizing: border-box;
 	}
+
 	:global(.CodeMirror-dialog-bottom > span[style]),
 	:global(.CodeMirror-dialog input) {
 		font-family: var(--font-family) !important;
 	}
+
 	:global(.CodeMirror-dialog-bottom) {
 		border-top-color: var(--background-light) !important;
 		border-top: 2px solid;
