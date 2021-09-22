@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { flip } from 'ramda';
-	import { mode, nodes, focus, edges, cursor } from '../stores.js';
+	import { mode, nodes, focus, edges, cursor, selection } from '../stores.js';
 	import panzoom from '../utils/panzoom.js';
 	import { sizes, svg } from '../config.js';
 	import Node from './node/Node.svelte';
@@ -14,21 +14,19 @@
 
 	const focusable = flip(focus.register);
 
-	const modals = {
+	$: modal = {
 		visual: Visual,
 		'visual-line': Visual,
 		connect: Connect,
 		to: To,
-	};
-
-	$: modal = modals[$mode];
+	}[$mode];
 
 	cursor.set({ x: 0, y: 0 });
 
 	onMount(() => focus.set('graph'));
 </script>
 
-<div class="wrapper" use:focusable={'graph'}>
+<div class="canvas-wrapper" use:focusable={'graph'}>
 	<div class="board" style="--grid-size({sizes.grid}px)" use:panzoom>
 		<Grid />
 		<!-- TODO: ask about this linting warning -->
@@ -39,7 +37,7 @@
 			{/each}
 		</svg>
 		{#each $nodes as { id } (id)}
-			<Node {id} />
+			<Node {id} selected={$selection.includes(id)} />
 		{/each}
 		<Cursor />
 		<svelte:component this={modal} />
@@ -53,11 +51,23 @@
 		top: 0px;
 		left: 0px;
 	}
-	.wrapper {
+
+	:global(.canvas-wrapper) {
 		background-color: var(--background-medium);
 		width: 100%;
 		height: 100%;
 		outline: none;
 		overflow: hidden;
+	}
+
+	:global(.canvas-wrapper *) {
+		font-family: var(--font-family);
+		font-size: 14px;
+		line-height: 23px;
+	}
+
+	:global(.canvas-wrapper pre) {
+		font-family: var(--font-family-mono);
+		font-size: 14px;
 	}
 </style>

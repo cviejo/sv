@@ -15,6 +15,8 @@ const fill = curry((step, x) => x + step - ((x - 1) % step) - 1);
 
 const notEquals = complement(equals);
 
+const propNotEq = complement(propEq);
+
 const idEq = propEq('id');
 
 const between = curry((a, b, x) => lte(a, x) && gt(b, x));
@@ -40,6 +42,7 @@ export {
 	distance,
 	notEquals,
 	pointInRect,
+	propNotEq,
 	findFromPoint,
 	intersect,
 };

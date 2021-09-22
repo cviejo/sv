@@ -1,5 +1,4 @@
-import { take } from 'ramda';
-import { forEachAsync } from './utils/function.js';
+import { forEach } from './utils/function.js';
 import { nodes } from './stores.js';
 
 import edges from './stores/edges.js';
@@ -20,6 +19,6 @@ const graph = {
 	edges: [{ from: 'ping', outlet: 1, to: '1a', inlet: 0 }],
 };
 
-forEachAsync(x => nodes.add(x), take(3, graph.nodes)).then(() => {
-	setTimeout(() => graph.edges.forEach(x => edges.add(x)), 500);
-});
+forEach(x => nodes.add(x), graph.nodes);
+
+setTimeout(() => graph.edges.forEach(x => edges.add(x)), 500);

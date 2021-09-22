@@ -10,6 +10,8 @@ import writable from './stores/writable.js';
 
 const selection = writable([]);
 
+const settings = writable({ gridActive: true });
+
 const thunks = {
 	focusEq: thunkify(x => focus.get().id === x),
 	getNodes: thunkify(nodes.get),
@@ -19,4 +21,4 @@ const thunks = {
 	updateCursor: thunkify(cursor.update),
 };
 
-export { mode, cursor, visual, focus, nodes, edges, selection, focused, thunks };
+export { settings, mode, cursor, visual, focus, nodes, edges, selection, focused, thunks };

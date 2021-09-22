@@ -2,17 +2,18 @@
 	import { cond, whereEq, prop, thunkify } from 'ramda';
 	import { thunks } from '../stores.js';
 	import Select from 'svelte-select';
-	/* const formatted = x => ({ value: x.name, label: x.name, group: x.group }); */
 
+	export let placeholder = 'New node...';
 	export let items = [];
 
 	let select = null;
 
-	let props = {
+	const props = {
 		items,
+		placeholder,
+		labelIdentifier: 'title',
 		listOpen: true,
 		listAutoWidth: false,
-		placeholder: '',
 		groupBy: prop('group'),
 	};
 
@@ -33,8 +34,12 @@
 </div>
 
 <style>
+	* {
+		font-family: var(--font-family);
+	}
+
 	.cover {
-		background-color: rgba(0, 0, 0, 0.6);
+		background-color: rgba(0, 0, 0, 0.5);
 		position: absolute;
 		left: 0px;
 		top: 0px;
@@ -42,13 +47,8 @@
 		height: 100%;
 		z-index: 100;
 	}
+
 	.theme {
-		background-color: var(--background-dark);
-		position: absolute;
-		top: 4em;
-		left: calc(50% - 10em);
-		width: 20em;
-		height: 20em;
 		--background: var(--background-light);
 		--border: 0px solid black;
 		--borderRadius: 0px;
@@ -56,6 +56,7 @@
 		--groupTitleColor: rgba(255, 255, 255, 0.3);
 		--groupTitlePadding: 0 1em;
 		--inputColor: white;
+		--inputMargin: 0px;
 		--inputFontSize: 1em;
 		--itemActiveBackground: rgb(120, 120, 120);
 		--itemColor: white;
@@ -64,10 +65,24 @@
 		--itemIsActiveBG: rgb(120, 120, 120);
 		--listBackground: var(--background-dark);
 		--listBorderRadius: 0px;
-		/* --borderFocusColor: black; */
-		/* --borderHoverColor: black; */
-		/* --disabledPlaceholderColor: white; */
-		/* --placeholderColor: black; */
-		/* --placeholderColor: white; */
+		--placeholderColor: rgb(120, 120, 130);
+		background-color: var(--background-dark);
+		height: 15em;
+		left: calc(50% - 15em);
+		position: absolute;
+		top: 4em;
+		width: 30em;
+	}
+
+	:global(.listContainer) {
+		box-shadow: none !important;
+		margin-top: -5px;
+	}
+	:global(.listContainer::-webkit-scrollbar) {
+		width: 7px;
+		background-color: transparent;
+	}
+	:global(.listContainer::-webkit-scrollbar-thumb) {
+		background-color: var(--background-light);
 	}
 </style>

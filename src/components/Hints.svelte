@@ -45,5 +45,8 @@
 		overflow: hidden;
 		position: absolute;
 		padding: 0px 3px;
+		/* optional: */
+		text-transform: capitalize;
+		display: inline-block;
 	}
 </style>

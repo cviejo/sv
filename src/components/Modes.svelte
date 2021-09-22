@@ -1,13 +1,13 @@
 <script>
 	import { tick, getContext } from 'svelte';
 	import { cond, __, whereEq, pipe, juxt, both, test, propEq, prop } from 'ramda';
-	import { thunkify, isNil, ifElse } from 'ramda';
+	import { thunkify, isNil, ifElse, evolve, not, curry } from 'ramda';
 	import Select from '../components/Select.svelte';
 	import { stopPropagation, preventDefault } from '../utils/effects.js';
-	import { focus, thunks, nodes, visual, cursor, selection, mode } from '../stores.js';
-	import { safe, noop, forEachAsync } from '../utils/function.js';
+	import { focus, thunks, settings, nodes, visual, cursor, selection, mode } from '../stores.js';
+	import { safe, noop, forEach } from '../utils/function.js';
 	import { moveBy } from '../utils/graph.js';
-	import { back, word, end } from '../utils/motions.js';
+	import { w, b, e } from '../utils/motions.js';
 	import { intersect, findFromPoint } from '../utils/relation.js';
 	import { bindAll, notNil, path } from '../utils/object.js';
 	import { sizes } from '../config.js';
@@ -49,9 +49,9 @@
 	const editSpec = node => {
 		const spec = specs.get(node.spec);
 
-		edit(spec.code, code => {
+		edit(spec.name, spec.code, code => {
 			spec.code = code;
-			forEachAsync(updateNode, nodes.filter(propEq('spec', spec.name)));
+			forEach(updateNode, nodes.filter(propEq('spec', spec.name)));
 		});
 		focus.set('editor');
 	};
@@ -72,15 +72,16 @@
 		[whereEq({ key: 'j' }), updateCursor({ y: sizes.step })],
 		[whereEq({ key: 'k' }), updateCursor({ y: -sizes.step })],
 		[whereEq({ key: 'x' }), pipe(nodeFromPoint, safe(remove))],
-		[whereEq({ key: 'e' }), motion(end)],
-		[whereEq({ key: 'w' }), motion(word)],
-		[whereEq({ key: 'b' }), motion(back)],
+		[whereEq({ key: 'e' }), motion(e)],
+		[whereEq({ key: 'w' }), motion(w)],
+		[whereEq({ key: 'b' }), motion(b)],
 		[whereEq({ key: 'f' }), setMode('connect')],
 		[whereEq({ key: 't' }), setMode('to')],
 		[whereEq({ key: 'v' }), setMode('visual')],
 		[whereEq({ key: 'V' }), setMode('visual-line')],
 		[whereEq({ key: 'f' }), setMode('select-spec')],
 		[whereEq({ key: 'i' }), pipe(preventDefault, insert)],
+		[whereEq({ key: ' ' }), pipe(preventDefault, nodeFromPoint, x => x.dispatch('space'))],
 	]);
 
 	const visualMode = cond([
@@ -93,21 +94,35 @@
 		[whereEq({ key: 'w', ctrlKey: true }), pipe(stopPropagation, focus.next)],
 		[whereEq({ key: 'K' }), pipe(stopPropagation, focus.next)],
 		[whereEq({ key: 'J' }), pipe(stopPropagation, focus.next)],
+		/* [modeEq('select-menu'), noop], */
+		/* [modeEq('new-node'), noop], */
+		[whereEq({ key: 'p', ctrlKey: true }), setMode('select-menu')],
 		[focusEq('editor'), noop],
 		[whereEq({ key: 'Escape' }), juxt([setSelection([]), setMode('normal')])],
 		[modeEq('insert'), noop],
-		[whereEq({ key: 'p', ctrlKey: true }), setMode('select-menu')],
-		[whereEq({ key: 'f' }), setMode('connect')],
-		[whereEq({ key: 't' }), setMode('to')],
-		[whereEq({ key: 'v' }), setMode('visual')],
-		[whereEq({ key: 'V' }), setMode('visual-line')],
+		[modeEq('to'), noop],
+		[modeEq('connect'), noop],
 		[modeEq('normal'), normalMode],
 		[modeEq('visual'), visualMode],
 		[modeEq('visual-line'), visualMode],
 	]);
+
+	const toggleProp = curry((prop, x) => evolve({ [prop]: not }, x));
+
+	const onCommand = x => {
+		if (x.detail.value === 'Toggle grid') {
+			settings.update(toggleProp('gridActive'));
+		} else {
+			edit('Key mappings', '{}', console.log);
+			focus.set('editor');
+		}
+		mode.set('normal');
+	};
 </script>
 
-{#if $mode === 'new-node'}
+{#if $mode === 'select-menu'}
+	<Select on:select={onCommand} placeholder=">" items={['Toggle grid', 'Key mappings']} />
+{:else if $mode === 'new-node'}
 	<Select on:select={onSpec} items={specs.data.map(x => x.name)} />
 {/if}
 

@@ -9,19 +9,14 @@
 
 	const hint = curry((node, io, index) => ({ id: node.id, index, ...moveBy(node, io) }));
 
-	const ios = (type, xs) => xs.flatMap(node => node[type].map(hint(node)));
+	const ios = (type, nodes) => nodes.flatMap(node => node[type].map(hint(node)));
 
 	const selection = x => {
 		if (from === null) {
 			from = x;
 			items = ios('inlets', $nodes);
 		} else {
-			edges.toggle({
-				from: from.id,
-				outlet: from.index,
-				to: x.id,
-				inlet: x.index,
-			});
+			edges.toggle({ from: from.id, outlet: from.index, to: x.id, inlet: x.index });
 			mode.set('normal');
 		}
 	};

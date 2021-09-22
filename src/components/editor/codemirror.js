@@ -1,8 +1,9 @@
-import { pipe, prop, propEq, curry, tap, reject, propOr, find } from 'ramda';
+import { pipe, prop, propEq, curry, tap, propOr } from 'ramda';
 import codemirror from 'codemirror';
 import { format } from '../../utils/prettier.js';
+import { propNotEq } from '../../utils/relation.js';
 import { bindAll } from '../../utils/object.js';
-import { noop, nullary } from '../../utils/function.js';
+import { noop } from '../../utils/function.js';
 import { dispatchEvent } from '../../utils/effects.js';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
@@ -40,13 +41,14 @@ const options = {
 };
 
 const onEx = curry((ex, editor, data) => {
-	const callback = pipe(find(propEq('editor', editor)), propOr(noop, ex));
-	callback(instances)(data);
+	const instance = instances.find(propEq('editor', editor));
+	const callback = propOr(noop, ex, instance);
+	callback(data);
 });
 
 const defineEx = (long, short) => codemirror.Vim.defineEx(long, short, onEx(long));
 
-const withCursor = curry((editor, fn) => () => {
+const withCursor = curry((editor, fn) => (/* e */) => {
 	const scroll = editor.getScrollInfo();
 	const cursor = editor.getCursor();
 
@@ -81,12 +83,10 @@ export default (node, callback) => {
 
 	const dispatchWrite = dispatchEvent(node, 'write');
 
-	const write = pipe(nullary(getValue), format, tap(setValue), dispatchWrite);
-
-	const removeEditor = reject(propEq('editor', editor));
+	const write = pipe(noop, getValue, format, tap(setValue), dispatchWrite);
 
 	const destroy = () => {
-		instances = removeEditor(instances);
+		instances = instances.filter(propNotEq('editor', editor));
 	};
 
 	instances.push({ editor, node, write: withCursor(editor, write) });
